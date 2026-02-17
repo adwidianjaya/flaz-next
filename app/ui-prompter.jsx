@@ -1,22 +1,57 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRightCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSignalEffect, useComputed, signal } from "@preact/signals-react";
-import { useSignals } from "@preact/signals-react/runtime";
-import { For } from "@preact/signals-react/utils";
-import { produce } from "immer";
+import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 import { encode as toonEncode } from "@toon-format/toon";
 import {
   initDefinition,
   updateDefinitionByOperationString,
   convertDefinitionToRenderStructure,
 } from "@/lib/json-render";
+import { JsonRenderer } from "@/lib/catalog/JsonRenderer";
 
-const definition = signal(initDefinition());
-const structure = signal({});
-const logs = signal([]);
+const useDefinitionStore = create(
+  immer((set) => {
+    return {
+      definition: initDefinition(),
+
+      updateDefinition: (definition) =>
+        set((state) => {
+          state.definition = definition;
+        }),
+    };
+  }),
+);
+const useStructureStore = create(
+  immer((set) => {
+    return {
+      structure: {
+        states: {},
+        elements: [],
+      },
+
+      updateStructure: (structure) =>
+        set((state) => {
+          state.structure = structure;
+        }),
+    };
+  }),
+);
+const useLogStore = create(
+  immer((set) => {
+    return {
+      logs: [],
+
+      addLog: (logMessage) =>
+        set((state) => {
+          state.logs.push(logMessage);
+        }),
+    };
+  }),
+);
 
 const UIPrompter = () => {
   return (
@@ -37,8 +72,9 @@ const UIPrompter = () => {
           "border-b border-t border-l border-gray-700",
         )}
       >
-        <div className="w-full h-full text-xs px-3 py-2 overflow-scroll"></div>
-
+        <div className="w-full h-full text-xs px-3 py-2 overflow-scroll">
+          <StructureRenderer />
+        </div>
         <LogView />
       </div>
     </>
@@ -48,25 +84,24 @@ const UIPrompter = () => {
 export { UIPrompter };
 
 const StructureView = () => {
-  useSignals();
-  // console.log(
-  //   "...structure.value",
-  //   structure.value,
-  //   // JSON.stringify(structure.value, null, 2),
-  // );
-  const structureString = useComputed(() => {
-    return JSON.stringify(structure.value, null, 2);
-    // return toonEncode(structure.value);
-  });
+  const structure = useStructureStore((state) => state.structure);
+  const structureString = useMemo(() => {
+    return JSON.stringify(structure, null, 4);
+    // return toonEncode(structure);
+  }, [structure]);
 
   return (
-    <div className="w-full h-full overflow-scroll text-xs px-3 py-2 whitespace-pre font-mono">
+    <div className="w-full h-full overflow-scroll text-sm px-3 py-2 whitespace-pre font-mono">
       {structureString}
     </div>
   );
 };
 
 const PromptInput = () => {
+  const { definition, updateDefinition } = useDefinitionStore();
+  const updateStructure = useStructureStore((state) => state.updateStructure);
+  const addLog = useLogStore((state) => state.addLog);
+
   const [prompt, setPrompt] = useState(
     "create form, input name, and output simple greeting. The greeting should be in the form of 'Hello, {name}!' with orange text.",
   );
@@ -86,14 +121,16 @@ const PromptInput = () => {
     if (!reader) return;
 
     let lastLine = "";
+    let currentDefinition = { ...definition };
     while (true) {
       const { value, done } = await reader.read();
       // console.log({ value, done });
 
       if (done) {
-        logs.value = produce(logs.value, (draft) => {
-          draft.push(value);
-        });
+        addLog(value);
+        // logs.value = produce(logs.value, (draft) => {
+        //   draft.push(value);
+        // });
         // logs.value = [...logs.value, value];
         break;
       }
@@ -105,41 +142,43 @@ const PromptInput = () => {
 
         if (index < lines.length - 1) {
           lastLine = String(lastLine || "").trim();
-          logs.value = produce(logs.value, (draft) => {
-            draft.push(lastLine);
-          });
-          // logs.value = [...logs.value, String(lastLine || "").trim()];
+          addLog(lastLine);
 
-          definition.value = updateDefinitionByOperationString({
+          const newDefinition = updateDefinitionByOperationString({
             operationString: lastLine,
-            definition: definition.value,
+            definition: currentDefinition,
           });
-          structure.value = convertDefinitionToRenderStructure({
-            definition: definition.value,
+          // updateDefinition(newDefinition);
+          const newStructure = convertDefinitionToRenderStructure({
+            definitionReferences: newDefinition,
           });
+          updateStructure(newStructure);
 
           lastLine = "";
+          currentDefinition = { ...newDefinition };
         }
       }
     }
 
     if (lastLine) {
       lastLine = String(lastLine || "").trim();
-      logs.value = produce(logs.value, (draft) => {
-        draft.push(lastLine);
-      });
-      // logs.value = [...logs.value, String(lastLine || "").trim()];
+      addLog(lastLine);
 
-      definition.value = updateDefinitionByOperationString({
+      const newDefinition = updateDefinitionByOperationString({
         operationString: lastLine,
-        definition: definition.value,
+        definition: currentDefinition,
       });
-      structure.value = convertDefinitionToRenderStructure({
-        definition: definition.value,
+      // updateDefinition(newDefinition);
+      const newStructure = convertDefinitionToRenderStructure({
+        definitionReferences: newDefinition,
       });
+      updateStructure(newStructure);
 
       lastLine = "";
+      currentDefinition = { ...newDefinition };
     }
+
+    updateDefinition({ ...currentDefinition });
   };
 
   return (
@@ -177,17 +216,10 @@ const PromptInput = () => {
 };
 
 const LogView = () => {
-  useSignals();
-
   const logViewContainer = useRef(null);
-  useSignalEffect(() => {
-    // We access .value to ensure this effect subscribes to changes in the 'logs' signal
-    const count = logs.value.length;
-    // console.log("...count", count);
-    if (!count) {
-      return;
-    }
 
+  const logs = useLogStore((state) => state.logs);
+  useEffect(() => {
     if (logViewContainer.current) {
       // Using requestAnimationFrame ensures the DOM has finished rendering
       // the new list items before we calculate the new scroll height.
@@ -198,22 +230,22 @@ const LogView = () => {
         });
       });
     }
-  });
+  }, [logs?.length]);
 
   return (
     <div
       ref={logViewContainer}
       className="h-32 flex-none border-t border-gray-700 text-sm px-3 py-2 overflow-y-scroll"
     >
-      <For
-        each={logs}
-        fallback={<div className="text-gray-600">Log view is empty.</div>}
-      >
-        {(message, index) => {
-          // console.log({ message });
-          return <div key={index}>{message}</div>;
-        }}
-      </For>
+      {logs.map((message, index) => {
+        return <div key={index}>{message}</div>;
+      })}
     </div>
   );
+};
+
+const StructureRenderer = () => {
+  const structure = useStructureStore((state) => state.structure);
+
+  return <JsonRenderer elements={structure?.elements || []} />;
 };

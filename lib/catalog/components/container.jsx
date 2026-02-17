@@ -11,7 +11,7 @@ const ContainerComponent = ({
 }) => {
   return (
     <div
-      class={cn(
+      className={cn(
         "flex",
         direction === "row" && "flex-row",
         direction === "column" && "flex-col",

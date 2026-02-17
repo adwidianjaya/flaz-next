@@ -22,18 +22,18 @@ const CardComponent = ({
     <Card
       size={maxWidth}
       className={cn(
-        // maxWidth === "sm" && "max-w-sm",
-        // maxWidth === "md" && "max-w-md",
-        // maxWidth === "lg" && "max-w-lg",
-        // maxWidth === "xl" && "max-w-xl",
-        // maxWidth === "2xl" && "max-w-2xl",
-        // maxWidth === "3xl" && "max-w-3xl",
+        maxWidth === "sm" && "max-w-sm",
+        maxWidth === "md" && "max-w-md",
+        maxWidth === "lg" && "max-w-lg",
+        maxWidth === "xl" && "max-w-xl",
+        maxWidth === "2xl" && "max-w-2xl",
+        maxWidth === "3xl" && "max-w-3xl",
         centered && "mx-auto",
         className,
       )}
     >
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-xl">{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
         {/* <CardAction>Card Action</CardAction> */}
       </CardHeader>

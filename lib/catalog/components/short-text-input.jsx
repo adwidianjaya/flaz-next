@@ -23,6 +23,7 @@ const ShortTextInputComponent = ({
           placeholder={placeholder}
           disabled={disabled}
           value={value}
+          onChange={(e) => {}}
         />
         {description && <FieldDescription>{description}</FieldDescription>}
       </Field>
@@ -58,7 +59,7 @@ const spec = {
       value: z.string().optional(),
     })
     .toJSONSchema(),
-  events: ["oninput"],
+  // events: ["oninput"],
 };
 
 export { ShortTextInputComponent as default, spec };
