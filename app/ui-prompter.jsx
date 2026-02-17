@@ -3,34 +3,68 @@
 import { useRef, useState } from "react";
 import { ArrowRightCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSignalEffect, signal } from "@preact/signals-react";
+import { useSignalEffect, useComputed, signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 import { For } from "@preact/signals-react/utils";
 import { produce } from "immer";
+import { encode as toonEncode } from "@toon-format/toon";
+import {
+  initDefinition,
+  updateDefinitionByOperationString,
+  convertDefinitionToRenderStructure,
+} from "@/lib/json-render";
 
-const messages = signal([]);
+const definition = signal(initDefinition());
+const structure = signal({});
+const logs = signal([]);
 
 const UIPrompter = () => {
   return (
-    <div className="flex h-full border-b border-t border-gray-700">
-      <div className="w-1/4 flex flex-col">
-        <div className="h-full"></div>
-        <div className="h-32 flex-none border-t border-gray-700 flex flex-col">
-          <PromptInput />
-        </div>
+    <>
+      <div
+        className={cn(
+          "w-1/4 flex flex-col",
+          "border-b border-t border-gray-700",
+        )}
+      >
+        <StructureView />
+        <PromptInput />
       </div>
 
-      <div className={cn("w-3/4 flex flex-col", "border-l border-gray-700")}>
-        <div className="h-full"></div>
-        <div className="h-32 flex-none border-t border-gray-700">
-          <LogView />
-        </div>
+      <div
+        className={cn(
+          "w-3/4 flex flex-col",
+          "border-b border-t border-l border-gray-700",
+        )}
+      >
+        <div className="w-full h-full text-xs px-3 py-2 overflow-scroll"></div>
+
+        <LogView />
       </div>
-    </div>
+    </>
   );
 };
 
 export { UIPrompter };
+
+const StructureView = () => {
+  useSignals();
+  // console.log(
+  //   "...structure.value",
+  //   structure.value,
+  //   // JSON.stringify(structure.value, null, 2),
+  // );
+  const structureString = useComputed(() => {
+    return JSON.stringify(structure.value, null, 2);
+    // return toonEncode(structure.value);
+  });
+
+  return (
+    <div className="w-full h-full overflow-scroll text-xs px-3 py-2 whitespace-pre font-mono">
+      {structureString}
+    </div>
+  );
+};
 
 const PromptInput = () => {
   const [prompt, setPrompt] = useState(
@@ -57,10 +91,10 @@ const PromptInput = () => {
       // console.log({ value, done });
 
       if (done) {
-        messages.value = produce(messages.value, (draft) => {
+        logs.value = produce(logs.value, (draft) => {
           draft.push(value);
         });
-        // messages.value = [...messages.value, value];
+        // logs.value = [...logs.value, value];
         break;
       }
 
@@ -70,10 +104,19 @@ const PromptInput = () => {
         lastLine += line;
 
         if (index < lines.length - 1) {
-          messages.value = produce(messages.value, (draft) => {
-            draft.push(String(lastLine || "").trim());
+          lastLine = String(lastLine || "").trim();
+          logs.value = produce(logs.value, (draft) => {
+            draft.push(lastLine);
           });
-          // messages.value = [...messages.value, String(lastLine || "").trim()];
+          // logs.value = [...logs.value, String(lastLine || "").trim()];
+
+          definition.value = updateDefinitionByOperationString({
+            operationString: lastLine,
+            definition: definition.value,
+          });
+          structure.value = convertDefinitionToRenderStructure({
+            definition: definition.value,
+          });
 
           lastLine = "";
         }
@@ -81,15 +124,26 @@ const PromptInput = () => {
     }
 
     if (lastLine) {
-      messages.value = produce(messages.value, (draft) => {
-        draft.push(String(lastLine || "").trim());
+      lastLine = String(lastLine || "").trim();
+      logs.value = produce(logs.value, (draft) => {
+        draft.push(lastLine);
       });
-      // messages.value = [...messages.value, String(lastLine || "").trim()];
+      // logs.value = [...logs.value, String(lastLine || "").trim()];
+
+      definition.value = updateDefinitionByOperationString({
+        operationString: lastLine,
+        definition: definition.value,
+      });
+      structure.value = convertDefinitionToRenderStructure({
+        definition: definition.value,
+      });
+
+      lastLine = "";
     }
   };
 
   return (
-    <>
+    <div className="h-32 flex-none border-t border-gray-700 flex flex-col">
       <textarea
         value={prompt}
         placeholder="Talk to Flaz here..."
@@ -118,7 +172,7 @@ const PromptInput = () => {
           <ArrowRightCircleIcon />
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -127,8 +181,8 @@ const LogView = () => {
 
   const logViewContainer = useRef(null);
   useSignalEffect(() => {
-    // We access .value to ensure this effect subscribes to changes in the 'messages' signal
-    const count = messages.value.length;
+    // We access .value to ensure this effect subscribes to changes in the 'logs' signal
+    const count = logs.value.length;
     // console.log("...count", count);
     if (!count) {
       return;
@@ -149,10 +203,10 @@ const LogView = () => {
   return (
     <div
       ref={logViewContainer}
-      className="w-full h-full outline-0 text-sm px-3 py-2 overflow-y-scroll"
+      className="h-32 flex-none border-t border-gray-700 text-sm px-3 py-2 overflow-y-scroll"
     >
       <For
-        each={messages}
+        each={logs}
         fallback={<div className="text-gray-600">Log view is empty.</div>}
       >
         {(message, index) => {
