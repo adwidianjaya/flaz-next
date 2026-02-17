@@ -6,10 +6,33 @@ import { cn } from "@/lib/utils";
 import { useSignalEffect, signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 import { For } from "@preact/signals-react/utils";
+import { produce } from "immer";
 
 const messages = signal([]);
 
 const UIPrompter = () => {
+  return (
+    <div className="flex h-full border-b border-t border-gray-700">
+      <div className="w-1/4 flex flex-col">
+        <div className="h-full"></div>
+        <div className="h-32 flex-none border-t border-gray-700 flex flex-col">
+          <PromptInput />
+        </div>
+      </div>
+
+      <div className={cn("w-3/4 flex flex-col", "border-l border-gray-700")}>
+        <div className="h-full"></div>
+        <div className="h-32 flex-none border-t border-gray-700">
+          <LogView />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export { UIPrompter };
+
+const PromptInput = () => {
   const [prompt, setPrompt] = useState(
     "create form, input name, and output simple greeting. The greeting should be in the form of 'Hello, {name}!' with orange text.",
   );
@@ -34,7 +57,10 @@ const UIPrompter = () => {
       // console.log({ value, done });
 
       if (done) {
-        messages.value = [...messages.value, value];
+        messages.value = produce(messages.value, (draft) => {
+          draft.push(value);
+        });
+        // messages.value = [...messages.value, value];
         break;
       }
 
@@ -44,7 +70,10 @@ const UIPrompter = () => {
         lastLine += line;
 
         if (index < lines.length - 1) {
-          messages.value = [...messages.value, String(lastLine || "").trim()];
+          messages.value = produce(messages.value, (draft) => {
+            draft.push(String(lastLine || "").trim());
+          });
+          // messages.value = [...messages.value, String(lastLine || "").trim()];
 
           lastLine = "";
         }
@@ -52,56 +81,46 @@ const UIPrompter = () => {
     }
 
     if (lastLine) {
-      messages.value = [...messages.value, String(lastLine || "").trim()];
+      messages.value = produce(messages.value, (draft) => {
+        draft.push(String(lastLine || "").trim());
+      });
+      // messages.value = [...messages.value, String(lastLine || "").trim()];
     }
   };
 
   return (
-    <div className="flex h-full border-b border-t border-gray-700">
-      <div className="w-1/4 flex flex-col">
-        <div className="h-full"></div>
-        <div className="h-32 flex-none border-t border-gray-700 flex flex-col">
-          <textarea
-            value={prompt}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendPrompt();
-                return;
-              }
-            }}
-            onChange={(e) => {
-              setPrompt(e.target.value);
-            }}
-            className="w-full h-full outline-0 text-sm px-3 py-2"
-          ></textarea>
-          <div className="text-right flex-none">
-            <button
-              type="button"
-              onClick={sendPrompt}
-              className={cn(
-                "px-2 pb-2 cursor-pointer",
-                "text-gray-200 hover:text-gray-400",
-                "transition duration-100",
-              )}
-            >
-              <ArrowRightCircleIcon />
-            </button>
-          </div>
-        </div>
+    <>
+      <textarea
+        value={prompt}
+        placeholder="Talk to Flaz here..."
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendPrompt();
+            return;
+          }
+        }}
+        onChange={(e) => {
+          setPrompt(e.target.value);
+        }}
+        className="w-full h-full outline-0 text-sm px-3 py-2"
+      ></textarea>
+      <div className="text-right flex-none">
+        <button
+          type="button"
+          onClick={sendPrompt}
+          className={cn(
+            "px-2 pb-2 cursor-pointer",
+            "text-gray-200 hover:text-gray-400",
+            "transition duration-100",
+          )}
+        >
+          <ArrowRightCircleIcon />
+        </button>
       </div>
-
-      <div className={cn("w-3/4 flex flex-col", "border-l border-gray-700")}>
-        <div className="h-full"></div>
-        <div className="h-32 flex-none border-t border-gray-700">
-          <LogView />
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
-
-export { UIPrompter };
 
 const LogView = () => {
   useSignals();
