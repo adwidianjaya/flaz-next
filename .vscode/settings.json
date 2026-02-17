@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "explorer.compactFolders": false,
+  "workbench.tree.indent": 12
+}
