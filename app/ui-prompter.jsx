@@ -1,14 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowRightCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  useSignal,
-  useComputed,
-  useSignalEffect,
-  signal,
-} from "@preact/signals-react";
+import { useSignalEffect, signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 import { For } from "@preact/signals-react/utils";
 
