@@ -86,7 +86,9 @@ export { UIPrompter };
 const StructureView = () => {
   const structure = useStructureStore((state) => state.structure);
   const structureString = useMemo(() => {
-    return JSON.stringify(structure, null, 4);
+    // console.log({ structure });
+    const structureString = JSON.stringify(structure, null, 4);
+    return structureString;
     // return toonEncode(structure);
   }, [structure]);
 
@@ -245,7 +247,9 @@ const LogView = () => {
 };
 
 const StructureRenderer = () => {
-  const structure = useStructureStore((state) => state.structure);
+  const { structure } = useStructureStore();
 
-  return <JsonRenderer elements={structure?.elements || []} />;
+  return (
+    <JsonRenderer states={structure?.states} elements={structure?.elements} />
+  );
 };

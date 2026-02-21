@@ -13,6 +13,7 @@ const ShortTextInputComponent = ({
   disabled = false,
   placeholder = "",
   value,
+  onChangeValue,
 }) => {
   return (
     <FieldGroup>
@@ -23,7 +24,10 @@ const ShortTextInputComponent = ({
           placeholder={placeholder}
           disabled={disabled}
           value={value}
-          onChange={(e) => {}}
+          onChange={(e) => {
+            if (e) e.preventDefault();
+            onChangeValue?.(e?.target?.value);
+          }}
         />
         {description && <FieldDescription>{description}</FieldDescription>}
       </Field>
