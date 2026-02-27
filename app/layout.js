@@ -21,8 +21,9 @@ export default function RootLayout({ children }) {
       <body className={`${nunito.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
+          // forcedTheme="light"
           disableTransitionOnChange
         >
           {children}

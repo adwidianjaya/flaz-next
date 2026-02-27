@@ -42,9 +42,59 @@ const useStatesStore = create(
   }),
 );
 
+const normalizeStatePath = (path = "") =>
+  String(path || "")
+    .replace(/^\/states\/?/, "")
+    .split("/")
+    .filter(Boolean)
+    .join(".");
+
+const resolveFormatPart = (part, states) => {
+  if (typeof part === "string" && part.startsWith("/states/")) {
+    return lodashGet(states, normalizeStatePath(part), "");
+  }
+
+  if (part && typeof part === "object" && typeof part.$state === "string") {
+    return lodashGet(states, normalizeStatePath(part.$state), "");
+  }
+
+  return part ?? "";
+};
+
+const resolveProps = ({ props = {}, states, updateStatesByPath }) => {
+  const result = {};
+
+  for (const key of Object.keys(props)) {
+    const value = props[key];
+
+    if (value && typeof value === "object" && typeof value.$bind === "string") {
+      const bindPath = normalizeStatePath(value.$bind);
+      result[key] = lodashGet(states, bindPath, "");
+      result.onChangeValue = (nextValue) => {
+        updateStatesByPath(bindPath, nextValue);
+      };
+      continue;
+    }
+
+    if (value && typeof value === "object" && Array.isArray(value.$format)) {
+      result[key] = value.$format
+        .map((part) => resolveFormatPart(part, states))
+        .join("");
+      continue;
+    }
+
+    result[key] = value;
+  }
+
+  return result;
+};
+
 const Element = ({ type, props, children }) => {
   const Component = Components[type];
-  // console.log({ type, Component });
+
+  const states = useStatesStore((state) => state.states);
+  const updateStatesByPath = useStatesStore((state) => state.updateStatesByPath);
+  const normalizedProps = resolveProps({ props, states, updateStatesByPath });
 
   if (!Component) {
     return errorBoundaryFallbackRender({
@@ -54,11 +104,9 @@ const Element = ({ type, props, children }) => {
     });
   }
 
-  const states = useStatesStore((state) => state.states);
-
   return (
     <ErrorBoundary fallbackRender={errorBoundaryFallbackRender}>
-      <Component {...props}>
+      <Component {...normalizedProps}>
         {children?.map((element, index) => {
           return <Element key={index} {...element} />;
         })}
@@ -72,7 +120,7 @@ const JsonRenderer = ({ elements = [], states = {} }) => {
   useEffect(() => {
     // console.log("...initStates", states);
     initStates({ ...states });
-  }, [states]);
+  }, [states, initStates]);
 
   // console.log({ elements });
 
