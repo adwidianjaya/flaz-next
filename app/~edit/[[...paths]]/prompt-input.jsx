@@ -1,16 +1,17 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { CircleArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+import { cn } from "@/lib/utils";
+import { useDefinition, useLogs, useSchema } from "@/lib/json-render/ui/store";
 import {
-  initDefinition,
   updateDefinitionByOperationString,
   convertDefinitionToRenderSchema,
 } from "@/lib/json-render/utils";
-import { useDefinition, useLogs, useSchema } from "./store";
+
 import { saveCurrentPage } from "./action";
-import { useParams } from "next/navigation";
 
 export const PromptInput = () => {
   const params = useParams();

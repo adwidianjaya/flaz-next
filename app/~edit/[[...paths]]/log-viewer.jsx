@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useLogs } from "./store";
+
+import { useLogs } from "@/lib/json-render/ui/store";
 import { cn } from "@/lib/utils";
 
 export const LogViewer = () => {

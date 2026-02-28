@@ -19,7 +19,7 @@ export const spec = {
 const TextComponent = ({ text = "", level = "p", className }) => {
   return (
     <div
-      class={cn(
+      className={cn(
         "mt-2",
         level === "h1" && "text-3xl",
         level === "h2" && "text-2xl",
@@ -31,7 +31,7 @@ const TextComponent = ({ text = "", level = "p", className }) => {
         className,
       )}
     >
-      {props.text}
+      {text}
     </div>
   );
 };

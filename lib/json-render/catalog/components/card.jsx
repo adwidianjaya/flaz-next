@@ -64,7 +64,7 @@ const CardComponent = ({
       </CardHeader>
       <CardContent>
         <div
-          className={[
+          className={cn(
             layout === "stack" && "flex flex-col",
             layout === "grid" && "grid",
             layout === "grid" && columns === "1" && "grid-cols-1",
@@ -76,7 +76,7 @@ const CardComponent = ({
             gap === "4" && `gap-4`,
             gap === "6" && `gap-6`,
             gap === "8" && `gap-8`,
-          ]}
+          )}
         >
           {children}
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useDefinition, useSchema } from "./store";
+import { useDefinition, useSchema } from "@/lib/json-render/ui/store";
 import { useEffect, useMemo } from "react";
 import { convertDefinitionToRenderSchema } from "@/lib/json-render/utils";
 
