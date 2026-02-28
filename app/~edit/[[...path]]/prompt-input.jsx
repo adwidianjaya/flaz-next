@@ -9,8 +9,11 @@ import {
   convertDefinitionToRenderSchema,
 } from "@/lib/json-render/utils";
 import { useDefinition, useLogs, useSchema } from "./store";
+import { saveCurrentPage } from "./action";
+import { useParams } from "next/navigation";
 
 export const PromptInput = () => {
+  const params = useParams();
   const [definition, definitionAction] = useDefinition();
   const [schema, schemaAction] = useSchema();
   const [_, logsAction] = useLogs();
@@ -104,10 +107,15 @@ export const PromptInput = () => {
         lastLine = "";
       }
 
+      const path = ["", ...(params.path || [])].join("/");
+      await saveCurrentPage({
+        name: "",
+        path,
+        schema: currentSchema,
+        definition: currentDefinition,
+      });
       definitionAction.setDefinition(currentDefinition);
       schemaAction.setSchema(currentSchema);
-
-      // await saveCurrentPage();
     } catch (err) {
       console.warn(err);
     }
