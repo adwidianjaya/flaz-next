@@ -44,12 +44,34 @@ export const Renderer = ({}) => {
   });
 };
 
+const NotFound = ({ type }) => {
+  return (
+    <div
+      role="alert"
+      style={{
+        border: "1px solid #ef4444",
+        background: "#fef2f2",
+        color: "#b91c1c",
+        borderRadius: "6px",
+        padding: "8px 10px",
+        fontSize: "12px",
+        margin: "4px 0",
+      }}
+    >
+      {`Error: no module type "${type}"`}
+    </div>
+  );
+};
+
 const Element = ({ element }) => {
-  const Component = modules[element.type];
-  if (!Component) return null;
+  const type = element?.type ?? "unknown";
+  const Component = modules[type];
+  if (!Component) {
+    return <NotFound type={type} />;
+  }
   // console.log({ element, Component });
 
-  const props = element.props || [];
+  const props = element.props || {};
   const children = element.children;
   // console.log({ props, children });
 
