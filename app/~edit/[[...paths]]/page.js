@@ -44,7 +44,7 @@ export default async function Page({ params }) {
                 "border-b border-t border-gray-200",
               )}
             >
-              <SideNavigator initialDefinition={currentPage?.definition} />
+              <SideNavigator />
 
               <PromptInput />
             </div>
@@ -60,7 +60,7 @@ export default async function Page({ params }) {
                   Preview
                 </div>
                 <div className="px-3 py-2">
-                  <Renderer initialDefinition={currentPage?.definition} />
+                  <Renderer />
                 </div>
               </div>
 

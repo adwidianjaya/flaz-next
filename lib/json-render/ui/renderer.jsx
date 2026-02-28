@@ -36,9 +36,6 @@ export const RendererProvider = ({ initialDefinition, children }) => {
 };
 
 export const Renderer = ({}) => {
-  // const { schema, definition } = useRendererContext();
-  // console.log({ schema, definition });
-
   const [schema] = useSchema();
   // console.log({ schema });
 

@@ -1,31 +1,15 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useDefinition, useSchema } from "@/lib/json-render/ui/store";
-import { useEffect, useMemo } from "react";
-import { convertDefinitionToRenderSchema } from "@/lib/json-render/utils";
+import { useSchema } from "@/lib/json-render/ui/store";
+import { useMemo } from "react";
 
-export const SideNavigator = ({ initialDefinition }) => {
-  const [schema, schemaAction] = useSchema();
+export const SideNavigator = () => {
+  const [schema] = useSchema();
   const schemaStringified = useMemo(() => {
     // console.log({ schema });
     return JSON.stringify(schema, null, 2);
   }, [schema]);
-
-  const [definition, definitionAction] = useDefinition();
-  useEffect(() => {
-    if (!initialDefinition) {
-      return;
-    }
-
-    // console.log({ initialDefinition });
-    let initialSchema = convertDefinitionToRenderSchema({
-      definition: initialDefinition,
-      initialStates: {},
-    });
-    definitionAction.setDefinition(initialDefinition);
-    schemaAction.setSchema(initialSchema);
-  }, [initialDefinition]);
 
   return (
     <div className="h-full overflow-y-scroll bg-gray-100">
