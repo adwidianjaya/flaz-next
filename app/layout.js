@@ -16,6 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
+        <link rel="icon" href="/favicon.svg" />
       </head>
 
       <body className={`${nunito.className} antialiased`}>

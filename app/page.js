@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/~edit/");
+      router.replace("/~pages/");
     }, 3000);
 
     return () => clearTimeout(timer);

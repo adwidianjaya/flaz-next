@@ -1,5 +1,5 @@
-import { deployPromptRoute } from "@/lib/json-render";
+import { handlePromptRoute } from "@/lib/json-render/prompt";
 
 export async function POST(request) {
-  return deployPromptRoute(request);
+  return handlePromptRoute(request);
 }
