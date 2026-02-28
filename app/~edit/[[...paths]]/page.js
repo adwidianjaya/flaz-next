@@ -3,13 +3,20 @@ import { LogViewer } from "./log-viewer";
 import { SideNavigator } from "./side-navigator";
 import { cn } from "@/lib/utils";
 import { PromptInput } from "./prompt-input";
+import { loadCurrentPage } from "./loader";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Edit Page",
 };
 
-export default async function Page() {
+export default async function Page({ params }) {
+  const { paths = [] } = await params;
+  const path = ["", ...(paths || [])].join("/");
+  // console.log({ paths, path });
+  const currentPage = await loadCurrentPage(path);
+  // console.log({ currentPage });
+
   return (
     <>
       <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" />
@@ -33,7 +40,7 @@ export default async function Page() {
               "border-b border-t border-gray-200",
             )}
           >
-            <SideNavigator />
+            <SideNavigator initialDefinition={currentPage?.definition} />
 
             <PromptInput />
           </div>

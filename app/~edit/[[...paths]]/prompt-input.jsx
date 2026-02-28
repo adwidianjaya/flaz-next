@@ -107,7 +107,7 @@ export const PromptInput = () => {
         lastLine = "";
       }
 
-      const path = ["", ...(params.path || [])].join("/");
+      const path = ["", ...(params.paths || [])].join("/");
       await saveCurrentPage({
         name: "",
         path,
