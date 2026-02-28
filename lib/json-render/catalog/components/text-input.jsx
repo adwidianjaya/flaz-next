@@ -48,6 +48,7 @@ const TextInput = ({
   placeholder = "",
   disabled = false,
   value,
+  onChangeValue,
   type = "text",
   rows = 2,
   className,
@@ -68,7 +69,7 @@ const TextInput = ({
             value={value}
             onChange={(e) => {
               if (e) e.preventDefault();
-              // onChangeValue?.(e?.target?.value);
+              onChangeValue?.(e?.target?.value);
             }}
             className={className}
           />
@@ -81,7 +82,7 @@ const TextInput = ({
             value={value}
             onChange={(e) => {
               if (e) e.preventDefault();
-              // onChangeValue?.(e?.target?.value);
+              onChangeValue?.(e?.target?.value);
             }}
             className={className}
           />
