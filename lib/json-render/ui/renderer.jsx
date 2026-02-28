@@ -60,5 +60,4 @@ const Element = ({ element }) => {
       })}
     </Component>
   );
-  return null;
 };
