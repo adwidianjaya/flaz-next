@@ -157,7 +157,10 @@ export const SideNavigator = () => {
                               saveCurrentPageDebounced();
                             }}
                           >
-                            <SelectTrigger className="font-mono text-xs h-auto w-full">
+                            <SelectTrigger
+                              size="sm"
+                              className="font-mono text-xs h-auto w-full bg-white"
+                            >
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -174,7 +177,8 @@ export const SideNavigator = () => {
                           </Select>
                         ) : (
                           <Textarea
-                            className="font-mono text-xs min-h-[unset]"
+                            size="sm"
+                            className="font-mono text-xs min-h-[unset] bg-white"
                             value={
                               typeof value === "string"
                                 ? value
