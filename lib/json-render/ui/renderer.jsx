@@ -152,7 +152,7 @@ const createReactiveProps = (elementProps, states) => {
     // console.log("...reactiveKey", reactiveKey, bindingPath);
 
     let newValue;
-    let propValue = elementProps[reactiveKey] || "";
+    const propValue = elementProps[reactiveKey];
     if (isString(propValue)) {
       try {
         newValue = SimpleTemplatingEngine.render(propValue, states || {});
