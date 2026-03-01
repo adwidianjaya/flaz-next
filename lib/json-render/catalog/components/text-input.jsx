@@ -18,6 +18,7 @@ export const spec = {
   props: z
     .object({
       label: z.string().optional(),
+      description: z.string().optional(),
       placeholder: z.string().optional(),
       disabled: z.boolean().optional(),
       value: z.union([z.string(), z.number()]).optional(),
@@ -67,10 +68,7 @@ const TextInput = ({
             disabled={disabled}
             rows={rows}
             value={value}
-            onChange={(e) => {
-              if (e) e.preventDefault();
-              onChangeValue?.(e?.target?.value);
-            }}
+            onChange={(e) => onChangeValue?.(e?.target?.value)}
             className={className}
           />
         ) : (
@@ -80,10 +78,7 @@ const TextInput = ({
             disabled={disabled}
             type={type}
             value={value}
-            onChange={(e) => {
-              if (e) e.preventDefault();
-              onChangeValue?.(e?.target?.value);
-            }}
+            onChange={(e) => onChangeValue?.(e?.target?.value)}
             className={className}
           />
         )}

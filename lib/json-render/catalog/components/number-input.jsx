@@ -57,7 +57,7 @@ const NumberInputComponent = ({
           step={step}
           value={value ?? ""}
           placeholder={placeholder || label || ""}
-          className={[classProp, className].filter(Boolean).join(" ")}
+          className={cn(classProp, className)}
           onChange={(event) => {
             const raw = event?.target?.value;
             if (raw === "") {
