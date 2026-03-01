@@ -1,6 +1,9 @@
 "use client";
 
+import { Text } from "@/lib/json-render/catalog/components/modules";
+import TextInput from "@/lib/json-render/catalog/components/text-input";
 import { cn } from "@/lib/utils";
+import { set } from "lodash-es";
 import { proxy, useSnapshot } from "valtio";
 
 // 1. Define your global state proxy OUTSIDE the components.
@@ -13,12 +16,20 @@ const store = proxy({
     active: false,
   },
   history: [],
+  //
+  states: {
+    name: "",
+  },
 });
 
 const Page = () => {
   return (
     // Look how clean the parent component is now! No Providers needed.
-    <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto py-8 w-full h-dvh">
+    <div className="grid grid-cols-4 gap-4 container mx-auto py-8 w-full h-dvh">
+      <div>
+        <InputComponent />
+        <OutputComponent />
+      </div>
       <ComponentA />
       <ComponentB />
       <Componentc />
@@ -27,6 +38,29 @@ const Page = () => {
 };
 
 export default Page;
+
+const InputComponent = () => {
+  const snap = useSnapshot(store.counter);
+
+  return (
+    <TextInput
+      label="Name"
+      name="name"
+      value={store.states.name}
+      // value={snap.states.name}
+      onChangeValue={(value) => {
+        console.log("...onChangeValue", value);
+        store.states.name = value;
+      }}
+    />
+  );
+};
+
+const OutputComponent = () => {
+  const snap = useSnapshot(store);
+
+  return <Text text={snap.states.name} />;
+};
 
 const ComponentA = () => {
   // We don't use `useSnapshot` here because this component only writes data.
@@ -42,7 +76,9 @@ const ComponentA = () => {
         )}
         onClick={() => {
           // Direct mutation! Valtio detects this and updates listeners automatically.
-          store.counter.count++;
+
+          // store.counter.count++;
+          set(store.counter, "count", store.counter.count + 1);
         }}
       >
         Update Component B
@@ -56,7 +92,9 @@ const ComponentA = () => {
         )}
         onClick={() => {
           // No spread operators needed. Just flip the boolean.
-          store.status.active = !store.status.active;
+
+          // store.status.active = !store.status.active;
+          set(store.status, "active", !store.status.active);
         }}
       >
         Update Component C
