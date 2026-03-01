@@ -1,0 +1,241 @@
+{
+  "root": "root-container",
+  "states": {
+    "form": {
+      "firstName": "",
+      "lastName": "",
+      "email": "",
+      "phone": "",
+      "category": "",
+      "tshirt": ""
+    }
+  },
+  "elements": {
+    "event-image": {
+      "type": "Image",
+      "props": {
+        "src": "https://images.unsplash.com/photo-1758684051112-3df152ce3256?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "alt": "CoolinerRun Event",
+        "fit": "cover",
+        "rounded": true,
+        "className": "h-full min-h-[600px] w-full object-cover"
+      }
+    },
+    "form-title": {
+      "type": "Text",
+      "props": {
+        "text": "CoolinerRun",
+        "level": "h1"
+      }
+    },
+    "form-subtitle": {
+      "type": "Text",
+      "props": {
+        "text": "Register now and join the ultimate running experience. Fill in your details below to secure your spot.",
+        "level": "p"
+      }
+    },
+    "badge-event": {
+      "type": "Badge",
+      "props": {
+        "label": "2025 Season",
+        "variant": "secondary"
+      }
+    },
+    "sep-1": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "input-firstname": {
+      "type": "TextInput",
+      "props": {
+        "label": "First Name",
+        "name": "firstName",
+        "placeholder": "John",
+        "value": "{$states.form.firstName}"
+      }
+    },
+    "input-lastname": {
+      "type": "TextInput",
+      "props": {
+        "label": "Last Name",
+        "name": "lastName",
+        "placeholder": "Doe",
+        "value": "{$states.form.lastName}"
+      }
+    },
+    "name-row": {
+      "type": "Container",
+      "props": {
+        "layout": "grid",
+        "direction": "row",
+        "columns": "2",
+        "gap": "4",
+        "align": "start",
+        "justify": "start"
+      },
+      "children": [
+        "input-firstname",
+        "input-lastname"
+      ]
+    },
+    "input-email": {
+      "type": "TextInput",
+      "props": {
+        "label": "Email Address",
+        "name": "email",
+        "type": "email",
+        "placeholder": "you@example.com",
+        "value": "{$states.form.email}"
+      }
+    },
+    "input-phone": {
+      "type": "TextInput",
+      "props": {
+        "label": "Phone Number",
+        "name": "phone",
+        "type": "tel",
+        "placeholder": "+1 555 000 0000",
+        "value": "{$states.form.phone}"
+      }
+    },
+    "input-category": {
+      "type": "SelectInput",
+      "props": {
+        "label": "Race Category",
+        "name": "category",
+        "placeholder": "Select a category",
+        "value": "{$states.form.category}",
+        "options": [
+          {
+            "label": "5K Fun Run",
+            "value": "5k"
+          },
+          {
+            "label": "10K Classic",
+            "value": "10k"
+          },
+          {
+            "label": "Half Marathon",
+            "value": "half"
+          },
+          {
+            "label": "Full Marathon",
+            "value": "full"
+          }
+        ]
+      }
+    },
+    "input-tshirt": {
+      "type": "SelectInput",
+      "props": {
+        "label": "T-Shirt Size",
+        "name": "tshirt",
+        "placeholder": "Select size",
+        "value": "{$states.form.tshirt}",
+        "options": [
+          {
+            "label": "XS",
+            "value": "xs"
+          },
+          {
+            "label": "S",
+            "value": "s"
+          },
+          {
+            "label": "M",
+            "value": "m"
+          },
+          {
+            "label": "L",
+            "value": "l"
+          },
+          {
+            "label": "XL",
+            "value": "xl"
+          },
+          {
+            "label": "XXL",
+            "value": "xxl"
+          }
+        ]
+      }
+    },
+    "category-row": {
+      "type": "Container",
+      "props": {
+        "layout": "grid",
+        "direction": "row",
+        "columns": "2",
+        "gap": "4",
+        "align": "start",
+        "justify": "start"
+      },
+      "children": [
+        "input-category",
+        "input-tshirt"
+      ]
+    },
+    "submit-btn": {
+      "type": "Button",
+      "props": {
+        "label": "Register for CoolinerRun",
+        "variant": "default",
+        "size": "lg"
+      }
+    },
+    "form-card": {
+      "type": "Card",
+      "props": {
+        "layout": "stack",
+        "gap": "4",
+        "columns": "1",
+        "className": ""
+      },
+      "children": [
+        "form-title",
+        "badge-event",
+        "form-subtitle",
+        "sep-1",
+        "name-row",
+        "input-email",
+        "input-phone",
+        "category-row",
+        "submit-btn"
+      ]
+    },
+    "root-container": {
+      "type": "Container",
+      "props": {
+        "layout": "grid",
+        "direction": "row",
+        "columns": "2",
+        "gap": "0",
+        "align": "stretch",
+        "justify": "start",
+        "className": "min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 p-8"
+      },
+      "children": [
+        "image-overlay-container",
+        "form-card"
+      ]
+    },
+    "image-overlay-container": {
+      "type": "Container",
+      "props": {
+        "layout": "flex",
+        "direction": "column",
+        "columns": "1",
+        "gap": "4",
+        "align": "end",
+        "justify": "start",
+        "className": "relative"
+      },
+      "children": [
+        "event-image"
+      ]
+    }
+  }
+}

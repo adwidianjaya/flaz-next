@@ -14,8 +14,8 @@ export default async function Page() {
 
   return (
     <>
-      <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" />
-      <div className="p-6">
+      {/* <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" /> */}
+      <div className="p-6 bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50">
         <Card>
           <CardHeader>
             <CardTitle>Pages</CardTitle>

@@ -22,7 +22,7 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" />
+      {/* <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" /> */}
 
       <RendererProvider initialDefinition={currentPage?.definition}>
         <div className="flex flex-col w-full h-dvh">
