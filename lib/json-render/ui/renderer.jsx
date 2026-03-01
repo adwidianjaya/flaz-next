@@ -82,11 +82,27 @@ const Element = ({ element }) => {
   // }
 
   return (
-    <Component {...props} elementId={element.elementId} reactiveProps={props}>
-      {children?.map((element, index) => {
-        return <Element key={element.type + index} element={element} />;
-      })}
-    </Component>
+    <div
+      // className="json-render-element"
+      style={{
+        position: "relative",
+        border: "1px solid transparent",
+        borderRadius: "4px",
+        transition: "border-color 0.15s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "#3b82f6";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "transparent";
+      }}
+    >
+      <Component {...props} elementId={element.elementId} reactiveProps={props}>
+        {children?.map((element, index) => {
+          return <Element key={element.type + index} element={element} />;
+        })}
+      </Component>
+    </div>
   );
 };
 
