@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 import {
   useSchema,
   useSelectedElement,
@@ -73,12 +74,21 @@ export const SideNavigator = () => {
                 {Object.entries(selectedElement.props || {}).map(
                   ([key, value]) => (
                     <div key={key} className="text-xs">
-                      <div className="font-medium text-gray-600">{key}</div>
-                      <div className="font-mono text-gray-500 bg-white p-1 rounded border">
-                        {typeof value === "string"
-                          ? value
-                          : JSON.stringify(value, null, 2)}
-                      </div>
+                      <div className="font-medium text-gray-600 mb-1">{key}</div>
+                      <Textarea
+                        className="font-mono text-xs min-h-[unset]"
+                        value={typeof value === "string" ? value : JSON.stringify(value, null, 2)}
+                        onChange={(e) => {
+                          let parsedValue = e.target.value;
+                          try {
+                            parsedValue = JSON.parse(e.target.value);
+                          } catch {
+                            parsedValue = e.target.value;
+                          }
+                          selectedElementActions.updateSelectedElementProp(key, parsedValue);
+                        }}
+                        rows={1}
+                      />
                     </div>
                   ),
                 )}
