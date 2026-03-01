@@ -1,0 +1,49 @@
+"use client";
+
+import { useState } from "react";
+import { saveCurrentPage } from "./action";
+import { useDefinition, useSchema } from "@/lib/json-render/ui/store";
+
+export const PageNameInput = ({ initialName, path }) => {
+  const [name, setName] = useState(initialName || "");
+  const [definition] = useDefinition();
+  const [schema] = useSchema();
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async (newName) => {
+    if (name === newName) return;
+
+    setSaving(true);
+    try {
+      await saveCurrentPage({
+        name: newName,
+        path,
+        definition,
+        schema,
+      });
+    } catch (err) {
+      console.warn(err);
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-sm text-gray-600">Name:</span>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        onBlur={() => handleSave(name)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.target.blur();
+          }
+        }}
+        placeholder="Page name"
+        className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        disabled={saving}
+      />
+    </div>
+  );
+};

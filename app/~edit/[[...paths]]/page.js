@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { LogViewer } from "./log-viewer";
 import { SideNavigator } from "./side-navigator";
 import { PromptInput } from "./prompt-input";
+import { PageNameInput } from "./page-name-input";
 import { loadCurrentPage } from "./loader";
 import { Renderer, RendererProvider } from "@/lib/json-render/ui/renderer";
 
@@ -35,6 +36,7 @@ export default async function Page({ params }) {
               />
               &nbsp; Flaz
             </div>
+            <PageNameInput initialName={currentPage?.name} path={path} />
           </div>
 
           <div className="flex flex-1 overflow-hidden">
