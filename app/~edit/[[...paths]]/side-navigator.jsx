@@ -10,12 +10,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  store,
   useSchema,
   useSelectedElement,
   useActiveTab,
 } from "@/lib/json-render/ui/store";
-import { useMemo } from "react";
+import { use, useCallback, useEffect, useMemo, useRef } from "react";
+import { useParams } from "next/navigation";
+import { snapshot } from "valtio";
 import * as componentSpecs from "@/lib/json-render/catalog/components/specs";
+import { saveCurrentPage } from "./action";
 
 const getPropSpec = (componentType, propName) => {
   const spec = componentSpecs[componentType];
@@ -24,13 +28,52 @@ const getPropSpec = (componentType, propName) => {
 };
 
 export const SideNavigator = () => {
+  const params = useParams();
+  const saveTimeoutRef = useRef(null);
   const [schema] = useSchema();
   const [selectedElement, selectedElementActions] = useSelectedElement();
   const [activeTab, activeTabActions] = useActiveTab();
+  const currentPath = useMemo(
+    () => ["", ...(params.paths || [])].join("/"),
+    [params.paths],
+  );
 
   const schemaStringified = useMemo(() => {
     return JSON.stringify(schema, null, 2);
   }, [schema]);
+
+  const saveCurrentPageDebounced = useCallback(() => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        const currentStore = snapshot(store);
+        // console.log(
+        //   "...currentStore.schema",
+        //   currentStore.schema,
+        //   currentStore.definition.elements["form-title"].props,
+        // );
+        await saveCurrentPage({
+          name: "",
+          path: currentPath,
+          schema: currentStore.schema,
+          definition: currentStore.definition,
+        });
+      } catch (error) {
+        console.warn("Failed to save current page", error);
+      }
+    }, 700);
+  }, [currentPath]);
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleTabChange = (tab) => {
     activeTabActions.setActiveTab(tab);
@@ -106,10 +149,12 @@ export const SideNavigator = () => {
                               } catch {
                                 parsedValue = newValue;
                               }
+                              // console.log({ key, parsedValue });
                               selectedElementActions.updateSelectedElementProp(
                                 key,
-                                parsedValue,
+                                String(parsedValue),
                               );
+                              saveCurrentPageDebounced();
                             }}
                           >
                             <SelectTrigger className="font-mono text-xs h-auto w-full">
@@ -146,6 +191,7 @@ export const SideNavigator = () => {
                                 key,
                                 parsedValue,
                               );
+                              saveCurrentPageDebounced();
                             }}
                             rows={1}
                           />

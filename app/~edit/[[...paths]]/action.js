@@ -13,7 +13,15 @@ export const saveCurrentPage = async ({
   schema,
 }) => {
   const normalizedName = name === undefined ? undefined : name.trim();
-  console.log("...saveCurrentPage", { name, normalizedName, currentPath });
+  console.log(
+    "...saveCurrentPage",
+    {
+      name,
+      normalizedName,
+      currentPath,
+    },
+    // definition.elements["form-title"].props,
+  );
 
   const payload = {
     name: normalizedName ?? "",
