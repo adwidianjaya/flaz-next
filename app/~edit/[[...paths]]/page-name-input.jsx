@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { saveCurrentPage } from "./action";
 import { useDefinition, useSchema } from "@/lib/json-render/ui/store";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 export const PageNameInput = ({ initialName, path }) => {
   const [name, setName] = useState(initialName || "");
@@ -29,21 +34,33 @@ export const PageNameInput = ({ initialName, path }) => {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-gray-600">Name:</span>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        onBlur={() => handleSave(name)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.target.blur();
-          }
-        }}
-        placeholder="Page name"
-        className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        disabled={saving}
-      />
+      <span className="text-sm text-gray-600">Page Title:</span>
+      <Popover>
+        <PopoverTrigger asChild>
+          <span className="cursor-pointer underline decoration-dashed text-sm text-gray-600">
+            {name || "Page name"}
+          </span>
+        </PopoverTrigger>
+        <PopoverContent className="p-2" sideOffset={4} align="center">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={() => handleSave(name)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.target.blur();
+              }
+            }}
+            placeholder="Page name"
+            className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 w-full"
+            disabled={saving}
+          />
+        </PopoverContent>
+      </Popover>
+      &nbsp;|&nbsp;
+      <span className="text-sm text-gray-600">Page Path:</span>
+      <span className="text-sm text-gray-500">{path}</span>
     </div>
   );
 };
