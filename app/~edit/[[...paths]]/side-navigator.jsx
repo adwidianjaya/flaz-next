@@ -15,11 +15,20 @@ import {
   useSelectedElement,
   useActiveTab,
 } from "@/lib/json-render/ui/store";
-import { use, useCallback, useEffect, useMemo, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useDeferredValue,
+} from "react";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { snapshot } from "valtio";
 import * as componentSpecs from "@/lib/json-render/catalog/components/specs";
 import { saveCurrentPage } from "./action";
+import { Copy, Check } from "lucide-react";
 
 const getPropSpec = (componentType, propName) => {
   const spec = componentSpecs[componentType];
@@ -27,20 +36,42 @@ const getPropSpec = (componentType, propName) => {
   return spec.props.properties[propName];
 };
 
+const LazySchemaViewer = dynamic(
+  () => import("./schema-viewer").then((mod) => mod.SchemaViewer),
+  {
+    ssr: false,
+    loading: () => (
+      <pre className="m-0 p-2 text-xs font-mono text-gray-500">
+        Loading schema...
+      </pre>
+    ),
+  },
+);
+
 export const SideNavigator = () => {
   const params = useParams();
   const saveTimeoutRef = useRef(null);
   const [schema] = useSchema();
   const [selectedElement, selectedElementActions] = useSelectedElement();
   const [activeTab, activeTabActions] = useActiveTab();
+  const [copied, setCopied] = useState(false);
   const currentPath = useMemo(
     () => ["", ...(params.paths || [])].join("/"),
     [params.paths],
   );
 
   const schemaStringified = useMemo(() => {
+    if (activeTab !== "schema") return "";
     return JSON.stringify(schema, null, 2);
-  }, [schema]);
+  }, [schema, activeTab]);
+
+  const deferredSchemaStringified = useDeferredValue(schemaStringified);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(schemaStringified);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const saveCurrentPageDebounced = useCallback(() => {
     if (saveTimeoutRef.current) {
@@ -83,12 +114,12 @@ export const SideNavigator = () => {
   };
 
   return (
-    <div className="h-full overflow-y-scroll bg-gray-100">
-      <div className="flex sticky top-0 left-0 z-10 bg-gray-600">
+    <div className="h-full flex flex-col bg-gray-100 overflow-hidden">
+      <div className="flex sticky top-0 left-0 z-10 bg-gray-600 shrink-0">
         <button
           onClick={() => handleTabChange("schema")}
           className={cn(
-            "px-3 py-1 text-xs font-medium transition duration-100",
+            "px-3 py-1 text-xs font-medium transition duration-100 cursor-pointer",
             activeTab === "schema"
               ? "bg-gray-100 text-gray-900"
               : "text-white hover:bg-gray-500",
@@ -99,7 +130,7 @@ export const SideNavigator = () => {
         <button
           onClick={() => handleTabChange("props")}
           className={cn(
-            "px-3 py-1 text-xs font-medium transition duration-100",
+            "px-3 py-1 text-xs font-medium transition duration-100 cursor-pointer",
             activeTab === "props"
               ? "bg-gray-100 text-gray-900"
               : "text-white hover:bg-gray-500",
@@ -109,18 +140,24 @@ export const SideNavigator = () => {
         </button>
       </div>
       {activeTab === "schema" && (
-        <div
-          className={cn(
-            "whitespace-pre font-mono text-xs px-2 py-1",
-            "text-gray-600 hover:text-black transition duration-100",
-          )}
-        >
-          {schemaStringified}
+        <div className="relative group min-h-0 flex-1 overflow-auto bg-white border-t border-gray-200">
+          <button
+            onClick={handleCopy}
+            className="absolute right-4 top-4 p-2 rounded-md bg-white border border-gray-200 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-50 z-10"
+            title="Copy schema"
+          >
+            {copied ? (
+              <Check className="w-4 h-4 text-green-600" />
+            ) : (
+              <Copy className="w-4 h-4 text-gray-400" />
+            )}
+          </button>
+          <LazySchemaViewer code={deferredSchemaStringified} />
         </div>
       )}
 
       {activeTab === "props" && (
-        <div className="px-3 py-2">
+        <div className="px-3 py-2 flex-1 overflow-auto">
           {selectedElement ? (
             <div>
               <div className="text-xs font-semibold mb-2 py-1 border-b border-gray-200">
