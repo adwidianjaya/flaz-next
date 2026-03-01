@@ -82,7 +82,7 @@ const Element = ({ element }) => {
   // }
 
   return (
-    <Component {...props} reactiveProps={props}>
+    <Component {...props} elementId={element.elementId} reactiveProps={props}>
       {children?.map((element, index) => {
         return <Element key={element.type + index} element={element} />;
       })}
