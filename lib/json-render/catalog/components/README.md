@@ -14,6 +14,16 @@ Each component is defined by a `spec` object that contains the following propert
 
 The `spec` object is used to generate the JSON schema for the component, which is then used to validate the component props and events.
 
+## Change Handler Naming
+
+When designing and implementing input components for the JSON renderer catalog, use this change handler convention for bindable props:
+
+- `onChange${upperFirst(propName)}`
+
+Example:
+
+- `value` -> `onChangeValue` (as used in `text-input.jsx`)
+
 ## Zod Schema Best Practices
 
 Use schema defaults only when they represent a meaningful fallback that should apply at runtime even when props are missing.
