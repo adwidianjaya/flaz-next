@@ -80,6 +80,8 @@ export const PromptInput = () => {
               definition: currentDefinition,
               initialStates: currentSchema.states,
             });
+            definitionAction.setDefinition(currentDefinition);
+            schemaAction.setSchema(currentSchema);
 
             lastLine = "";
           }
