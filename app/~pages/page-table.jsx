@@ -2,18 +2,12 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import dayjs from "dayjs";
+// implement dayjs relative time
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export default function PageTable({ pages }) {
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(date));
-  };
-
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -45,7 +39,7 @@ export default function PageTable({ pages }) {
                 </Link>
               </td>
               <td className="px-4 py-3 text-sm text-muted-foreground">
-                {formatDate(page.updated_at)}
+                {dayjs(page.updated_at).fromNow()}
               </td>
               <td className="px-4 py-3 text-sm">
                 <Button
