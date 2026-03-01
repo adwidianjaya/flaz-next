@@ -11,7 +11,7 @@ export const spec = {
         .enum(["h1", "h2", "h3", "h4", "h5", "h6", "p"])
         .optional()
         .default("p"),
-      class: z.string().optional(),
+      className: z.string().optional(),
     })
     .toJSONSchema(),
 };
