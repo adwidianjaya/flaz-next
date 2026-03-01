@@ -35,6 +35,7 @@ const SliderInput = ({
   step,
   disabled = false,
   className,
+  elementId,
   onChangeValue,
 }) => {
   const sliderValue = Array.isArray(value)
@@ -44,7 +45,7 @@ const SliderInput = ({
       : [min];
 
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         {label && <FieldLabel>{label}</FieldLabel>}
         <Slider

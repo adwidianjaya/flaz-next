@@ -16,9 +16,10 @@ export const spec = {
     .toJSONSchema(),
 };
 
-const TextComponent = ({ text = "", level = "p", className }) => {
+const TextComponent = ({ text = "", level = "p", className, elementId }) => {
   return (
     <div
+      data-element-id={elementId}
       className={cn(
         "mt-2",
         level === "h1" && "text-3xl",

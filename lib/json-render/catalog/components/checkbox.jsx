@@ -31,12 +31,13 @@ const CheckboxInput = ({
   disabled = false,
   required = false,
   className,
+  elementId,
   onChangeChecked,
 }) => {
   const id = label ? label.split(" ").join("-") : undefined;
 
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field orientation="horizontal">
         <Checkbox
           id={id}

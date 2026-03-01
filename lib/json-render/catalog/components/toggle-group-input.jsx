@@ -47,11 +47,12 @@ const ToggleGroupInput = ({
   size = "default",
   options = [],
   className,
+  elementId,
   onChangeValue,
   onChangeValues,
 }) => {
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         {label && <FieldLabel>{label}</FieldLabel>}
         <ToggleGroup

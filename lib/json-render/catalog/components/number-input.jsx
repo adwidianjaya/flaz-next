@@ -8,6 +8,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 
 export const spec = {
@@ -40,12 +41,13 @@ const NumberInputComponent = ({
   step = 1,
   class: classProp,
   className,
+  elementId,
   onChangeValue,
 }) => {
   const inputId = useMemo(() => `number-${label.split(" ").join("-")}`, [label]);
 
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         {label ? <FieldLabel htmlFor={inputId}>{label}</FieldLabel> : null}
         <Input

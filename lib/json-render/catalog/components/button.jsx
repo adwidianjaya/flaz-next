@@ -25,9 +25,10 @@ export const spec = {
   events: ["onclick"],
 };
 
-const ButtonComponent = ({ label, variant, size, disabled, className }) => {
+const ButtonComponent = ({ label, variant, size, disabled, className, elementId }) => {
   return (
     <Button
+      data-element-id={elementId}
       disabled={disabled}
       className={className}
       variant={variant}

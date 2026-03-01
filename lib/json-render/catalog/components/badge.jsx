@@ -16,9 +16,9 @@ export const spec = {
     .toJSONSchema(),
 };
 
-const BadgeComponent = ({ label = "", variant = "default", className }) => {
+const BadgeComponent = ({ label = "", variant = "default", className, elementId }) => {
   return (
-    <Badge variant={variant} className={className}>
+    <Badge data-element-id={elementId} variant={variant} className={className}>
       {label}
     </Badge>
   );

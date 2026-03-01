@@ -45,10 +45,12 @@ const ContainerComponent = ({
   justify = "stretch",
   class: classProp,
   className,
+  elementId,
   children,
 }) => {
   return (
     <div
+      data-element-id={elementId}
       className={cn(
         layout === "flex" && "flex",
         layout === "grid" && "grid",

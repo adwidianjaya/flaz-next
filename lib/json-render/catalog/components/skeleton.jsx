@@ -21,9 +21,11 @@ const SkeletonComponent = ({
   shape = "rounded",
   class: classProp,
   className,
+  elementId,
 }) => {
   return (
     <div
+      data-element-id={elementId}
       className={cn(
         "animate-pulse bg-muted",
         shape === "rounded" && "rounded-md",

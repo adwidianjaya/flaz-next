@@ -47,10 +47,11 @@ const SelectInput = ({
   disabled = false,
   options = [],
   className,
+  elementId,
   onChangeValue,
 }) => {
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         {label && <FieldLabel>{label}</FieldLabel>}
         <Select value={value} disabled={disabled} onValueChange={onChangeValue}>

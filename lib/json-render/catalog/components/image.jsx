@@ -32,9 +32,10 @@ const ImageComponent = ({
   rounded = false,
   class: classProp,
   className,
+  elementId,
 }) => {
   return (
-    <figure className={cn("space-y-2", classProp, className)}>
+    <figure data-element-id={elementId} className={cn("space-y-2", classProp, className)}>
       <img
         src={src}
         alt={alt || ""}

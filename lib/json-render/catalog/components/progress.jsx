@@ -33,11 +33,13 @@ const ProgressComponent = ({
   tone = "neutral",
   class: classProp,
   className,
+  elementId,
 }) => {
   const percent = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
 
   return (
     <div
+      data-element-id={elementId}
       className={cn(
         "h-2 w-full overflow-hidden rounded-full bg-muted",
         classProp,

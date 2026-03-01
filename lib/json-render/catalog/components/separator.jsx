@@ -20,9 +20,11 @@ const SeparatorComponent = ({
   decorative = true,
   class: classProp,
   className,
+  elementId,
 }) => {
   return (
     <Separator
+      data-element-id={elementId}
       orientation={orientation}
       decorative={decorative}
       className={cn(

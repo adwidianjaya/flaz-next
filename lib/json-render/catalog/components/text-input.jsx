@@ -53,12 +53,13 @@ const TextInput = ({
   type = "text",
   rows = 2,
   className,
+  elementId,
 }) => {
   const fieldGroupName = useMemo(() => label.split(" ").join("-"), [label]);
   // console.log({ fieldGroupName });
 
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         <FieldLabel htmlFor={fieldGroupName}>{label}</FieldLabel>
         {type === "multiline" ? (

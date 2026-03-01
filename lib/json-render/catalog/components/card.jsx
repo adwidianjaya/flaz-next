@@ -39,10 +39,12 @@ const CardComponent = ({
   gap = "4",
   columns = "1",
   className,
+  elementId,
   children,
 }) => {
   return (
     <Card
+      data-element-id={elementId}
       style={{
         width: typeof width === "number" ? `${width}px` : width,
       }}

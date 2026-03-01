@@ -40,6 +40,7 @@ const ListComponent = ({
   marker = "disc",
   class: classProp,
   className,
+  elementId,
 }) => {
   const normalizedItems = normalizeItems(items);
   const mergedClassName = cn(classProp, className);
@@ -47,6 +48,7 @@ const ListComponent = ({
   if (type === "ol") {
     return (
       <ol
+        data-element-id={elementId}
         className={cn(
           "pl-5",
           marker === "none" && "list-none",
@@ -66,7 +68,7 @@ const ListComponent = ({
 
   if (type === "check") {
     return (
-      <ul className={cn("space-y-2", mergedClassName)}>
+      <ul data-element-id={elementId} className={cn("space-y-2", mergedClassName)}>
         {normalizedItems.map((item, index) => (
           <li key={`${item.label}-${index}`} className="flex items-center gap-2">
             <Checkbox checked={item.checked} disabled />
@@ -79,6 +81,7 @@ const ListComponent = ({
 
   return (
     <ul
+      data-element-id={elementId}
       className={cn(
         "pl-5",
         marker === "none" && "list-none",

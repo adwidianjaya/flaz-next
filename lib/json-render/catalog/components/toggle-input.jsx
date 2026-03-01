@@ -33,10 +33,11 @@ const ToggleInput = ({
   variant = "default",
   size = "default",
   className,
+  elementId,
   onChangePressed,
 }) => {
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         <Toggle
           pressed={pressed}

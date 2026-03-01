@@ -31,12 +31,13 @@ const SwitchInput = ({
   disabled = false,
   size = "default",
   className,
+  elementId,
   onChangeChecked,
 }) => {
   const id = label ? label.split(" ").join("-") : undefined;
 
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field orientation="horizontal">
         <Switch
           id={id}

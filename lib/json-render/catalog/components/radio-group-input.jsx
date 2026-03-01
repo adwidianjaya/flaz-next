@@ -39,12 +39,13 @@ const RadioGroupInput = ({
   disabled = false,
   options = [],
   className,
+  elementId,
   onChangeValue,
 }) => {
   const groupName = label ? label.split(" ").join("-") : "radio-group";
 
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         {label && <FieldLabel>{label}</FieldLabel>}
         <RadioGroup

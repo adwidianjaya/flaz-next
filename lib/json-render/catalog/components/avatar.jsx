@@ -26,6 +26,7 @@ const AvatarComponent = ({
   shape = "circle",
   class: classProp,
   className,
+  elementId,
 }) => {
   const sizeClass = cn(
     size === "xs" && "size-6",
@@ -37,7 +38,7 @@ const AvatarComponent = ({
   const shapeClass = shape === "square" ? "rounded-md" : "rounded-full";
 
   return (
-    <Avatar className={cn(sizeClass, shapeClass, classProp, className)}>
+    <Avatar data-element-id={elementId} className={cn(sizeClass, shapeClass, classProp, className)}>
       {src ? <AvatarImage src={src} alt={alt || ""} className={shapeClass} /> : null}
       <AvatarFallback className={shapeClass}>{fallback || "?"}</AvatarFallback>
     </Avatar>

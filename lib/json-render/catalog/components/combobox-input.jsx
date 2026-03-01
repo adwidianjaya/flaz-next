@@ -50,10 +50,11 @@ const ComboboxInputComponent = ({
   disabled = false,
   options = [],
   className,
+  elementId,
   onChangeValue,
 }) => {
   return (
-    <FieldGroup>
+    <FieldGroup data-element-id={elementId}>
       <Field>
         {label && <FieldLabel>{label}</FieldLabel>}
         <Combobox value={value} onValueChange={onChangeValue} disabled={disabled}>

@@ -23,11 +23,13 @@ const LinkComponent = ({
   rel = "",
   class: classProp,
   className,
+  elementId,
 }) => {
   const safeRel = rel || (target === "_blank" ? "noopener noreferrer" : undefined);
 
   return (
     <a
+      data-element-id={elementId}
       href={href || "#"}
       target={target}
       rel={safeRel}

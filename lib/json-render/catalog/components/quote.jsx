@@ -23,9 +23,11 @@ const QuoteComponent = ({
   align = "left",
   class: classProp,
   className,
+  elementId,
 }) => {
   return (
     <blockquote
+      data-element-id={elementId}
       className={cn(
         "border-l-4 pl-4 py-1",
         align === "left" && "text-left",
