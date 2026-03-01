@@ -12,7 +12,7 @@ export const spec = {
         .optional()
         .default("row"),
       columns: z.enum(["1", "2", "3", "4", "5", "6"]).optional().default("1"),
-      gap: z.enum(["0", "2", "4", "6"]).optional().default("0"),
+      gap: z.enum(["0", "2", "4", "6", "8"]).optional().default("0"),
       align: z
         .enum(["start", "center", "end", "stretch"])
         .optional()
@@ -68,6 +68,7 @@ const ContainerComponent = ({
         gap === "2" && "gap-2",
         gap === "4" && "gap-4",
         gap === "6" && "gap-6",
+        gap === "8" && "gap-8",
         align === "start" && "items-start",
         align === "center" && "items-center",
         align === "end" && "items-end",
