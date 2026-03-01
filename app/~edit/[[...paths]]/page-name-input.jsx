@@ -38,10 +38,11 @@ export const PageNameInput = ({ initialName, path }) => {
       <Popover>
         <PopoverTrigger asChild>
           <span className="cursor-pointer underline decoration-dashed text-sm text-gray-600">
-            {name || "Page name"}
+            {name || "Page title"}
           </span>
         </PopoverTrigger>
         <PopoverContent className="p-2" sideOffset={4} align="center">
+          <div className="text-xs pb-1">Change page title:</div>
           <input
             type="text"
             value={name}
