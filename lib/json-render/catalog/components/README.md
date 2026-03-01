@@ -11,7 +11,7 @@ Each component is defined by a `spec` object that contains the following propert
   - `Layout`: The component is used for layout such as containers, grids, and columns.
   - `Action`: The component is used for actions such as buttons, links, and navigation.
 - `props`: A Zod schema that defines the properties of the component.
-- `events`: An array of event names that the component emits.
+<!-- - `events`: An array of event names that the component emits. -->
 
 The `spec` object is used to generate the JSON schema for the component, which is then used to validate the component props and events.
 
