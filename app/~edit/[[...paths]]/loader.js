@@ -20,7 +20,7 @@ export const loadCurrentPage = async (currentPath) => {
     .select()
     .from(pageTable)
     .where(eq(pageTable.path, currentPath));
-  let currentPage = pages[0] || DEFAULT_PAGE;
+  let currentPage = pages[0];
 
   if (currentPage) {
     const fileName = ("root" + currentPath.split("/").join(".") + ".json")
@@ -32,5 +32,6 @@ export const loadCurrentPage = async (currentPath) => {
     );
   }
 
+  // console.log({ currentPage });
   return currentPage;
 };

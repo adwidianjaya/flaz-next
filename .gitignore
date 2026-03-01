@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# !tmp/pages/README.md
-# tmp/pages/*.json
+!tmp/pages/README.md
+tmp/pages/*.json
