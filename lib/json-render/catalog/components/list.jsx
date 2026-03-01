@@ -1,0 +1,99 @@
+import { z } from "zod";
+import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
+
+const itemSchema = z.union([
+  z.string(),
+  z.object({
+    label: z.string(),
+    checked: z.boolean().optional(),
+  }),
+]);
+
+export const spec = {
+  description: "List content for bullet, numbered, or checklist styles.",
+  tags: ["Content"],
+  props: z
+    .object({
+      items: z.array(itemSchema).optional().default([]),
+      type: z.enum(["ul", "ol", "check"]).optional().default("ul"),
+      marker: z.enum(["disc", "decimal", "none"]).optional().default("disc"),
+      class: z.string().optional(),
+      className: z.string().optional(),
+    })
+    .toJSONSchema(),
+};
+
+const normalizeItems = (items = []) => {
+  return (items || []).map((item) => {
+    if (typeof item === "string") return { label: item, checked: false };
+    return {
+      label: item?.label || "",
+      checked: Boolean(item?.checked),
+    };
+  });
+};
+
+const ListComponent = ({
+  items = [],
+  type = "ul",
+  marker = "disc",
+  class: classProp,
+  className,
+}) => {
+  const normalizedItems = normalizeItems(items);
+  const mergedClassName = cn(classProp, className);
+
+  if (type === "ol") {
+    return (
+      <ol
+        className={cn(
+          "pl-5",
+          marker === "none" && "list-none",
+          marker === "disc" && "list-disc",
+          (!marker || marker === "decimal") && "list-decimal",
+          mergedClassName,
+        )}
+      >
+        {normalizedItems.map((item, index) => (
+          <li key={`${item.label}-${index}`} className="my-1">
+            {item.label}
+          </li>
+        ))}
+      </ol>
+    );
+  }
+
+  if (type === "check") {
+    return (
+      <ul className={cn("space-y-2", mergedClassName)}>
+        {normalizedItems.map((item, index) => (
+          <li key={`${item.label}-${index}`} className="flex items-center gap-2">
+            <Checkbox checked={item.checked} disabled />
+            <span>{item.label}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  return (
+    <ul
+      className={cn(
+        "pl-5",
+        marker === "none" && "list-none",
+        marker === "disc" && "list-disc",
+        marker === "decimal" && "list-decimal",
+        mergedClassName,
+      )}
+    >
+      {normalizedItems.map((item, index) => (
+        <li key={`${item.label}-${index}`} className="my-1">
+          {item.label}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+export default ListComponent;
