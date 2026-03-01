@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo } from "react";
-import { store, useDefinition, useSchema } from "./store";
+import { store, useDefinition, useSchema, useSelectedElement } from "./store";
 import { useSnapshot } from "valtio";
 import { convertDefinitionToRenderSchema } from "../utils";
 import * as modules from "../catalog/components/modules";
@@ -69,21 +69,16 @@ const NotFound = ({ type }) => {
 const Element = ({ element }) => {
   const props = useReactiveProps(element.props || {});
   const children = element.children;
+  const [, selectedElementActions] = useSelectedElement();
 
   const type = element?.type ?? "unknown";
   const Component = modules[type];
   if (!Component) {
     return <NotFound type={type} />;
   }
-  // console.log({ element, Component });
-
-  // if (type === "TextInput") {
-  //   console.log({ props, children, states });
-  // }
 
   return (
     <div
-      // className="json-render-element"
       style={{
         position: "relative",
         border: "1px solid transparent",
@@ -95,6 +90,10 @@ const Element = ({ element }) => {
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = "transparent";
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        selectedElementActions.setSelectedElement(element);
       }}
     >
       <Component {...props} elementId={element.elementId} reactiveProps={props}>

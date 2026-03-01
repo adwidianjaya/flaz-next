@@ -1,38 +1,50 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useSchema } from "@/lib/json-render/ui/store";
-import { useMemo, useState } from "react";
+import {
+  useSchema,
+  useSelectedElement,
+  useActiveTab,
+} from "@/lib/json-render/ui/store";
+import { useMemo } from "react";
 
 export const SideNavigator = () => {
   const [schema] = useSchema();
-  const [activeTab, setActiveTab] = useState("schema");
+  const [selectedElement, selectedElementActions] = useSelectedElement();
+  const [activeTab, activeTabActions] = useActiveTab();
 
   const schemaStringified = useMemo(() => {
     return JSON.stringify(schema, null, 2);
   }, [schema]);
 
+  const handleTabChange = (tab) => {
+    activeTabActions.setActiveTab(tab);
+    if (tab === "props") {
+      selectedElementActions.setSelectedElement(null);
+    }
+  };
+
   return (
     <div className="h-full overflow-y-scroll bg-gray-100">
       <div className="flex sticky top-0 left-0 z-10 bg-gray-600">
         <button
-          onClick={() => setActiveTab("schema")}
+          onClick={() => handleTabChange("schema")}
           className={cn(
             "px-3 py-1 text-xs font-medium transition duration-100",
             activeTab === "schema"
               ? "bg-gray-100 text-gray-900"
-              : "text-white hover:bg-gray-500"
+              : "text-white hover:bg-gray-500",
           )}
         >
           Schema
         </button>
         <button
-          onClick={() => setActiveTab("props")}
+          onClick={() => handleTabChange("props")}
           className={cn(
             "px-3 py-1 text-xs font-medium transition duration-100",
             activeTab === "props"
               ? "bg-gray-100 text-gray-900"
-              : "text-white hover:bg-gray-500"
+              : "text-white hover:bg-gray-500",
           )}
         >
           Props Editor
@@ -42,15 +54,46 @@ export const SideNavigator = () => {
         <div
           className={cn(
             "whitespace-pre font-mono text-xs px-2 py-1",
-            "text-gray-600 hover:text-black transition duration-100"
+            "text-gray-600 hover:text-black transition duration-100",
           )}
         >
           {schemaStringified}
         </div>
       )}
+
       {activeTab === "props" && (
-        <div className="p-2 text-xs text-gray-600">
-          Props Editor - Coming soon
+        <div className="px-3 py-2">
+          {selectedElement ? (
+            <div>
+              <div className="text-xs font-semibold text-gray-700 mb-2">
+                Selected Element: {selectedElement.type} [
+                {selectedElement.elementId}]
+              </div>
+              <div className="space-y-2">
+                {Object.entries(selectedElement.props || {}).map(
+                  ([key, value]) => (
+                    <div key={key} className="text-xs">
+                      <div className="font-medium text-gray-600">{key}</div>
+                      <div className="font-mono text-gray-500 bg-white p-1 rounded border">
+                        {typeof value === "string"
+                          ? value
+                          : JSON.stringify(value, null, 2)}
+                      </div>
+                    </div>
+                  ),
+                )}
+                {Object.keys(selectedElement.props || {}).length === 0 && (
+                  <div className="text-xs text-gray-500">
+                    No props available
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="text-xs text-gray-600">
+              Click on a component in the preview to edit its props
+            </div>
+          )}
         </div>
       )}
     </div>
