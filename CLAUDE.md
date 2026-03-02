@@ -60,9 +60,9 @@ Requires a `.env` file with:
 
 ### Component Catalog (`lib/json-render/catalog/components/`)
 
-Each component exports a `spec` object and a React component. The spec drives LLM awareness and prop validation.
+Each component has a `.jsx` file and a `.def.js` file. The def exports a `spec` object that drives LLM awareness and prop validation. All defs are aggregated in `defs.js`.
 
-Spec shape:
+Def shape:
 ```js
 export const spec = {
   description: "...",

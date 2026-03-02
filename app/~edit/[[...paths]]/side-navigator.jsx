@@ -26,12 +26,12 @@ import {
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { snapshot } from "valtio";
-import * as componentSpecs from "@/lib/json-render/catalog/components/specs";
+import * as componentDefs from "@/lib/json-render/catalog/components/defs";
 import { saveCurrentPage } from "./action";
 import { Copy, Check } from "lucide-react";
 
 const getPropSpec = (componentType, propName) => {
-  const spec = componentSpecs[componentType];
+  const spec = componentDefs[componentType];
   if (!spec?.props?.properties?.[propName]) return null;
   return spec.props.properties[propName];
 };
