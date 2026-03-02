@@ -1,7 +1,8 @@
 import { loadCurrentPage } from "@/app/~pages/loader";
 import { Renderer, RendererProvider } from "@/lib/json-render/ui/renderer";
 import { notFound } from "next/navigation";
-import { recordView } from "@/app/view-tracker";
+import { recordView } from "../view-tracker";
+import { getConfigs } from "@/app/~config/action";
 
 export const dynamic = "force-dynamic";
 
@@ -15,10 +16,17 @@ const resolveCurrentPage = async (params) => {
 
 export async function generateMetadata({ params }) {
   const { currentPage } = await resolveCurrentPage(params);
+  const configs = await getConfigs();
+
+  const siteName = configs.SITE_NAME || "Flaz Next";
+  const defaultDesc = configs.SITE_DESCRIPTION || "";
 
   return {
-    title: currentPage?.name || "Flaz Next",
-    description: currentPage?.description || "",
+    title: currentPage?.name ? `${currentPage.name} | ${siteName}` : siteName,
+    description: currentPage?.description || defaultDesc,
+    icons: {
+      icon: configs.FAVICON_URL || "/favicon.ico",
+    },
   };
 }
 

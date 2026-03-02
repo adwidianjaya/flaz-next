@@ -10,6 +10,7 @@ const navItems = [
   { href: "/~pages", label: "Pages" },
   { href: "/~collections", label: "Collections" },
   { href: "/~assets", label: "Assets" },
+  { href: "/~config", label: "Config" },
 ];
 
 const isActive = (pathname, href) => {

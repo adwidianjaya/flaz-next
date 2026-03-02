@@ -72,6 +72,7 @@ Each component consists of two files:
     - `~pages/`: Editor and page management.
     - `~collections/`: Data collection management.
     - `~assets/`: Asset management (images, logos, files).
+    - `~config/`: System configuration (API keys, storage).
     - `[[...path]]/`: Dynamic public viewer.
 - `lib/json-render/`: Core engine logic (renderer, store, utils, template engine).
 - `components/ui/`: Shared UI components (Shadcn UI).

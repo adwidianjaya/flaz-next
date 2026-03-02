@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowUpRight, FileText, LibraryBig, ImageIcon } from "lucide-react";
+import { ArrowUpRight, FileText, LibraryBig, ImageIcon, Settings } from "lucide-react";
 import { db } from "@/lib/db/drizzle";
-import { assetTable, collectionTable, pageTable } from "@/lib/db/schema";
+import { assetTable, collectionTable, pageTable, configTable } from "@/lib/db/schema";
 import {
   Card,
   CardContent,
@@ -41,19 +41,29 @@ const dashboardItems = [
     icon: ImageIcon,
     accent: "from-purple-100 via-indigo-50 to-white",
   },
+  {
+    href: "/~config",
+    title: "Config",
+    description: "System configuration, API keys, and storage settings.",
+    eyebrow: "Settings",
+    icon: Settings,
+    accent: "from-stone-200 via-stone-100 to-white",
+  },
 ];
 
 export default async function DashboardPage() {
-  const [pages, collections, assets] = await Promise.all([
+  const [pages, collections, assets, configs] = await Promise.all([
     db.select().from(pageTable),
     db.select().from(collectionTable),
     db.select().from(assetTable),
+    db.select().from(configTable),
   ]);
 
   const counts = {
     "/~pages": pages.length,
     "/~collections": collections.length,
     "/~assets": assets.length,
+    "/~config": configs.length,
   };
 
   return (
@@ -68,16 +78,15 @@ export default async function DashboardPage() {
             </div>
             <div className="max-w-2xl space-y-2">
               <CardTitle className="text-3xl leading-tight font-semibold">
-                Start in pages or data first in collections.
+                Manage your visual workspace and data.
               </CardTitle>
               <CardDescription className="text-sm text-stone-300">
-                This dashboard is structured as the editor landing page, with
-                room for onboarding guidance as the workspace grows.
+                Quickly jump into editor, content models, media library or system settings.
               </CardDescription>
             </div>
           </CardHeader>
           <CardContent className="grid gap-4 p-4 md:grid-cols-[minmax(0,1fr)]">
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {dashboardItems.map((item) => {
                 const Icon = item.icon;
 
@@ -117,7 +126,7 @@ export default async function DashboardPage() {
                       <CardContent className="p-6 pt-0">
                         <div className="rounded-2xl border border-stone-300/80 bg-white/75 p-4 backdrop-blur">
                           <div className="text-sm text-stone-500">
-                            Active {item.title.toLowerCase()}
+                            {item.title === "Config" ? "Settings defined" : `Active ${item.title.toLowerCase()}`}
                           </div>
                           <div className="mt-2 text-5xl font-semibold tracking-tight text-stone-950">
                             {counts[item.href]}
