@@ -1,5 +1,5 @@
 import { db } from "@/lib/db/drizzle";
-import { pageTable } from "@/lib/db/schema";
+import { pageTable, viewTable } from "@/lib/db/schema";
 import {
   Card,
   CardAction,
@@ -11,6 +11,7 @@ import {
 import PageTable from "./page-table";
 import { CreatePageButton } from "./create-page-button";
 import { TopBarNav } from "@/app/top-bar-nav";
+import { eq, sql } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -18,7 +19,17 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const pages = await db.select().from(pageTable);
+  const pages = await db
+    .select({
+      id: pageTable.id,
+      name: pageTable.name,
+      path: pageTable.path,
+      updated_at: pageTable.updated_at,
+      view_count: sql`count(${viewTable.id})`.mapWith(Number),
+    })
+    .from(pageTable)
+    .leftJoin(viewTable, eq(pageTable.id, viewTable.page_id))
+    .groupBy(pageTable.id);
 
   return (
     <div className="min-h-dvh bg-linear-to-b from-amber-50 via-amber-100/80 to-stone-50">

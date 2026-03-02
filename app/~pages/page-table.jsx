@@ -45,6 +45,9 @@ export default function PageTable({ pages }) {
               Path
             </th>
             <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              Views
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
               Updated
             </th>
             <th
@@ -59,7 +62,7 @@ export default function PageTable({ pages }) {
           {!pages.length && (
             <tr>
               <td
-                colSpan={4}
+                colSpan={5}
                 className="px-6 py-10 text-center text-sm text-gray-500"
               >
                 No pages yet. Create one to start building.
@@ -81,6 +84,9 @@ export default function PageTable({ pages }) {
                 >
                   {page.path}
                 </Link>
+              </td>
+              <td className="px-6 py-4 text-sm text-gray-600">
+                {page.view_count || 0}
               </td>
               <td className="px-6 py-4 text-sm text-gray-500">
                 {dayjs(page.updated_at).fromNow()}

@@ -53,6 +53,10 @@ Requires a `.env` file with:
 - Components bind to paths in `$states` (e.g., `{$states.form.name}`).
 - `SimpleTemplatingEngine` evaluates expressions and bindings in props.
 
+### 4. View Tracking
+- Views are recorded in the `__view` table for the dynamic public viewer.
+- The `recordView` function in `lib/db/view-tracker.js` captures `page_id`, `path`, `user_agent`, and `ip_address` on each page load.
+
 ## Component Catalog (`lib/json-render/catalog/components/`)
 Each component consists of two files:
 1.  **`[name].jsx`**: The React component implementation.

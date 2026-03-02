@@ -1,6 +1,7 @@
 import { loadCurrentPage } from "@/app/~pages/loader";
 import { Renderer, RendererProvider } from "@/lib/json-render/ui/renderer";
 import { notFound } from "next/navigation";
+import { recordView } from "@/app/view-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +23,15 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function RendererPage({ params }) {
-  const { currentPage } = await resolveCurrentPage(params);
+  const { currentPage, path } = await resolveCurrentPage(params);
 
   if (!currentPage?.id) notFound();
   // console.log({ currentPage });
+
+  // Record view (async but not awaited)
+  recordView(currentPage.id, path).catch((err) =>
+    console.error("View record failed:", err),
+  );
 
   return (
     <RendererProvider initialDefinition={currentPage?.definition}>
