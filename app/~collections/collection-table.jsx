@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { deleteCollection, createCollection, toTableName } from "./action";
+import { deleteCollection, createCollection } from "./action";
 import { useState } from "react";
 dayjs.extend(relativeTime);
 

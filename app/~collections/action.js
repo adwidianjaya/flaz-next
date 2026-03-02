@@ -5,6 +5,7 @@ import { collectionTable, collectionDeletedTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { sql } from "drizzle-orm";
+import { buildCollectionSchema } from "./schema";
 
 const toTableName = (name) =>
   name
@@ -26,7 +27,7 @@ export const createCollection = async ({ name }) => {
       .values({
         name: normalizedName,
         table_name: toTableName(normalizedName),
-        schema: {},
+        schema: buildCollectionSchema(),
       })
       .returning();
 
@@ -56,6 +57,7 @@ export const saveCurrentCollectionName = async ({ name, collectionId }) => {
       .set({
         name: normalizedName,
         table_name: toTableName(normalizedName),
+        updated_at: sql`now()`,
       })
       .where(eq(collectionTable.id, collectionId));
 
@@ -76,7 +78,8 @@ export const saveCurrentCollection = async ({ collectionId, schema }) => {
     await db
       .update(collectionTable)
       .set({
-        schema,
+        schema: buildCollectionSchema(schema),
+        updated_at: sql`now()`,
       })
       .where(eq(collectionTable.id, collectionId));
 
