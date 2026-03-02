@@ -59,11 +59,13 @@ const CardComponent = ({
         className,
       )}
     >
-      <CardHeader>
-        <CardTitle className="text-xl">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        {/* <CardAction>Card Action</CardAction> */}
-      </CardHeader>
+      {!title && !description ? null : (
+        <CardHeader>
+          <CardTitle className="text-xl">{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+          {/* <CardAction>Card Action</CardAction> */}
+        </CardHeader>
+      )}
       <CardContent>
         <div
           className={cn(
