@@ -9,6 +9,7 @@ const navItems = [
   { href: "/~dashboard", label: "Dashboard" },
   { href: "/~pages", label: "Pages" },
   { href: "/~collections", label: "Collections" },
+  { href: "/~assets", label: "Assets" },
 ];
 
 const isActive = (pathname, href) => {

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowUpRight, FileText, LibraryBig } from "lucide-react";
+import { ArrowUpRight, FileText, LibraryBig, ImageIcon } from "lucide-react";
 import { db } from "@/lib/db/drizzle";
-import { collectionTable, pageTable } from "@/lib/db/schema";
+import { assetTable, collectionTable, pageTable } from "@/lib/db/schema";
 import {
   Card,
   CardContent,
@@ -33,17 +33,27 @@ const dashboardItems = [
     icon: LibraryBig,
     accent: "from-emerald-100 via-teal-50 to-white",
   },
+  {
+    href: "/~assets",
+    title: "Assets",
+    description: "Manage and produce images, logos, and files for your pages.",
+    eyebrow: "Media library",
+    icon: ImageIcon,
+    accent: "from-purple-100 via-indigo-50 to-white",
+  },
 ];
 
 export default async function DashboardPage() {
-  const [pages, collections] = await Promise.all([
+  const [pages, collections, assets] = await Promise.all([
     db.select().from(pageTable),
     db.select().from(collectionTable),
+    db.select().from(assetTable),
   ]);
 
   const counts = {
     "/~pages": pages.length,
     "/~collections": collections.length,
+    "/~assets": assets.length,
   };
 
   return (
@@ -66,8 +76,8 @@ export default async function DashboardPage() {
               </CardDescription>
             </div>
           </CardHeader>
-          <CardContent className="grid gap-4 p-4 md:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
-            <div className="grid gap-4 md:grid-cols-2">
+          <CardContent className="grid gap-4 p-4 md:grid-cols-[minmax(0,1fr)]">
+            <div className="grid gap-4 md:grid-cols-3">
               {dashboardItems.map((item) => {
                 const Icon = item.icon;
 
@@ -119,35 +129,6 @@ export default async function DashboardPage() {
                 );
               })}
             </div>
-
-            <Card className="border-stone-200 bg-stone-100/80 shadow-none">
-              <CardHeader className="gap-3">
-                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
-                  Editor onboarding
-                </div>
-                <div>
-                  <CardTitle className="text-xl text-stone-950">
-                    Prepared for first-run guidance
-                  </CardTitle>
-                  <CardDescription className="mt-2 text-sm leading-relaxed text-stone-600">
-                    Use this area for guided setup, starter templates, or
-                    editorial checklists without changing the dashboard
-                    structure.
-                  </CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm text-stone-600">
-                <div className="rounded-2xl border border-dashed border-stone-300 bg-white/80 p-4">
-                  1. Create a page route to open the visual editor.
-                </div>
-                <div className="rounded-2xl border border-dashed border-stone-300 bg-white/80 p-4">
-                  2. Define collections when the editor needs structured data.
-                </div>
-                <div className="rounded-2xl border border-dashed border-stone-300 bg-white/80 p-4">
-                  3. Replace these placeholders with onboarding actions later.
-                </div>
-              </CardContent>
-            </Card>
           </CardContent>
         </Card>
       </div>

@@ -220,7 +220,9 @@ export default function CollectionTable({ collections }) {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleDelete(collection.id, collection.name)}
+                      onClick={() =>
+                        handleDelete(collection.id, collection.name)
+                      }
                       disabled={deleting === collection.id}
                     >
                       {deleting === collection.id ? "Deleting..." : "Delete"}
