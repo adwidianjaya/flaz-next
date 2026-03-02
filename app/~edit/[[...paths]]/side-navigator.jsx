@@ -117,17 +117,6 @@ export const SideNavigator = () => {
     <div className="h-full flex flex-col bg-gray-100 overflow-hidden">
       <div className="flex sticky top-0 left-0 z-10 bg-gray-600 shrink-0">
         <button
-          onClick={() => handleTabChange("schema")}
-          className={cn(
-            "px-3 py-1 text-xs font-medium transition duration-100 cursor-pointer",
-            activeTab === "schema"
-              ? "bg-gray-100 text-gray-900"
-              : "text-white hover:bg-gray-500",
-          )}
-        >
-          Schema
-        </button>
-        <button
           onClick={() => handleTabChange("props")}
           className={cn(
             "px-3 py-1 text-xs font-medium transition duration-100 cursor-pointer",
@@ -138,7 +127,19 @@ export const SideNavigator = () => {
         >
           Props Editor
         </button>
+        <button
+          onClick={() => handleTabChange("schema")}
+          className={cn(
+            "px-3 py-1 text-xs font-medium transition duration-100 cursor-pointer",
+            activeTab === "schema"
+              ? "bg-gray-100 text-gray-900"
+              : "text-white hover:bg-gray-500",
+          )}
+        >
+          Schema
+        </button>
       </div>
+
       {activeTab === "schema" && (
         <div className="relative group min-h-0 flex-1 overflow-auto bg-white border-t border-gray-200">
           <button
