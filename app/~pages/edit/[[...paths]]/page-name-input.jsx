@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import { saveCurrentPageName } from "../../action";
 import {
   Popover,
@@ -8,6 +10,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export const PageNameInput = ({ initialName, path }) => {
   const [name, setName] = useState(initialName || "");
@@ -59,9 +62,20 @@ export const PageNameInput = ({ initialName, path }) => {
       </Popover>
       <span className="text-gray-300">|</span>
       <span>Path:</span>
-      <code className="rounded bg-white px-2 py-1 text-xs text-gray-700 shadow-xs">
-        {path}
-      </code>
+      <Link
+        href={path || "/"}
+        target="_blank"
+        rel="noreferrer"
+        className="rounded bg-white px-2 py-1 text-xs text-gray-700 shadow-xs transition hover:text-gray-900 hover:shadow-sm"
+      >
+        <code>{path}</code>
+      </Link>
+      <Button asChild type="button" size="sm" variant="outline" className="h-7">
+        <Link href={path || "/"} target="_blank" rel="noreferrer">
+          <ExternalLink className="size-3.5" />
+          Open Preview
+        </Link>
+      </Button>
     </div>
   );
 };
