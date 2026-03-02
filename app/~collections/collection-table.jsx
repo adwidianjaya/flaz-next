@@ -167,18 +167,18 @@ export default function CollectionTable({ collections }) {
     <div className="overflow-x-auto">
       <table className="w-full min-w-[720px]">
         <thead>
-          <tr className="border-b border-gray-200 bg-gray-50">
-            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+          <tr className="border-b border-emerald-200/80 bg-emerald-50/70">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-emerald-900">
               Collection Name
             </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-emerald-900">
               Underlying Table Name
             </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-emerald-900">
               Updated
             </th>
             <th
-              className="px-6 py-3 text-left text-sm font-semibold text-gray-700"
+              className="px-6 py-3 text-left text-sm font-semibold text-emerald-900"
               style={{ width: 160 }}
             >
               Actions
@@ -190,7 +190,7 @@ export default function CollectionTable({ collections }) {
             <tr>
               <td
                 colSpan="4"
-                className="px-6 py-10 text-center text-sm text-gray-500"
+                className="px-6 py-10 text-center text-sm text-emerald-700"
               >
                 No collections yet. Create one to get started.
               </td>
@@ -199,15 +199,15 @@ export default function CollectionTable({ collections }) {
             collections.map((collection) => (
               <tr
                 key={collection.id}
-                className="border-b border-gray-200 transition-colors hover:bg-stone-50"
+                className="border-b border-emerald-100/80 transition-colors hover:bg-emerald-50/60"
               >
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                <td className="px-6 py-4 text-sm font-medium text-emerald-950">
                   {collection.name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
+                <td className="px-6 py-4 text-sm text-emerald-800/90">
                   {collection.table_name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-emerald-700">
                   {dayjs(collection.updated_at).fromNow()}
                 </td>
                 <td className="px-6 py-4 text-sm" style={{ width: 160 }}>

@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { TopBarNav } from "@/app/_components/top-bar-nav";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -46,10 +47,12 @@ export default async function DashboardPage() {
   };
 
   return (
-    <div className="min-h-dvh bg-stone-50 px-6 py-8">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6">
+    <div className="min-h-dvh bg-stone-50 ">
+      <TopBarNav />
+
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8">
         <Card className="overflow-hidden border-stone-200 bg-white shadow-sm">
-          <CardHeader className="gap-3 border-b border-stone-200 bg-gradient-to-r from-stone-950 via-stone-900 to-stone-800 text-stone-50">
+          <CardHeader className="gap-3 border-b border-stone-200 bg-linear-to-r from-stone-950 via-stone-900 to-stone-800 text-stone-50">
             <div className="text-xs font-semibold uppercase tracking-[0.24em] text-stone-300 pt-4">
               Flaz workspace
             </div>
@@ -75,7 +78,7 @@ export default async function DashboardPage() {
                     className="group block"
                   >
                     <Card
-                      className={`h-full min-h-72 justify-between border-stone-200 bg-gradient-to-br ${item.accent} p-0 shadow-none transition duration-200 hover:-translate-y-1 hover:border-stone-300 hover:shadow-lg`}
+                      className={`h-full min-h-72 justify-between border-stone-200 bg-linear-to-br ${item.accent} p-0 shadow-none transition duration-200 hover:-translate-y-1 hover:border-stone-300 hover:shadow-lg`}
                     >
                       <CardHeader className="gap-6 p-6">
                         <div className="flex items-start justify-between gap-4">

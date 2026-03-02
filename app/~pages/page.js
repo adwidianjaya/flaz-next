@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import PageTable from "./page-table";
 import { CreatePageButton } from "./create-page-button";
+import { TopBarNav } from "@/app/_components/top-bar-nav";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -20,10 +21,11 @@ export default async function Page() {
   const pages = await db.select().from(pageTable);
 
   return (
-    <div className="min-h-dvh bg-gradient-to-b from-amber-50 via-amber-100/80 to-stone-50 p-6">
-      <div className="mx-auto max-w-6xl">
+    <div className="min-h-dvh bg-linear-to-b from-amber-50 via-amber-100/80 to-stone-50">
+      <TopBarNav />
+      <div className="mx-auto max-w-6xl px-6 py-6">
         <Card className="gap-0 overflow-hidden border border-amber-200/60 bg-white shadow-lg">
-          <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-orange-300" />
+          <div className="h-1 w-full bg-linear-to-r from-amber-500 via-amber-400 to-orange-300" />
           <CardHeader className="gap-4 border-b border-amber-100 bg-amber-50/80 px-6 py-5 text-amber-900">
             <div>
               <CardTitle className="text-2xl text-amber-900">Pages</CardTitle>
