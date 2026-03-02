@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TopBarNav } from "@/app/_components/top-bar-nav";
+import { TopBarNav } from "@/app/top-bar-nav";
 
 export const dynamic = "force-dynamic";
 export const metadata = {

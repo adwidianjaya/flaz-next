@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import PageTable from "./page-table";
 import { CreatePageButton } from "./create-page-button";
-import { TopBarNav } from "@/app/_components/top-bar-nav";
+import { TopBarNav } from "@/app/top-bar-nav";
 
 export const dynamic = "force-dynamic";
 export const metadata = {

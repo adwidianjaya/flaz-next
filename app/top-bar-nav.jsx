@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -23,9 +24,20 @@ export const TopBarNav = () => {
   return (
     <div className="sticky top-0 z-20 border-b border-stone-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-6 py-3">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">
-          Flaz
-        </div>
+        <Link href="/~dashboard">
+          <div>
+            <Image
+              src="/logo.png"
+              alt="Flaz"
+              height={32}
+              width={32}
+              className="h-8 w-auto inline-block"
+            />
+            <div className="inline-block text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">
+              Flaz
+            </div>
+          </div>
+        </Link>
         <div className="ml-auto flex items-center gap-2">
           {navItems.map((item) => {
             const active = isActive(pathname, item.href);
