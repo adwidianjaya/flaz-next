@@ -23,7 +23,8 @@ export const PromptInput = () => {
     // `create a form, input name, and phone number and output simple greeting. The greeting should be in the form of 'Hello, {name}!'. if name is empty, render "No Name" with orange text. then check name length, if above 10, render Name is too long. if name is "Adhe", render "Noice", else render the name`,
     // `create form for event registration "CoolinerRun". put image on the left https://images.unsplash.com/photo-1758684051112-3df152ce3256?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
     // `find image in internet and change image on the left`,
-    `create form for event registration "CoolinerRun". find illustration and put image on the left`,
+    // `create form for event registration "CoolinerRun". find illustration and put image on the left`,
+    `change bg to solid color`,
   );
   const handleSendPrompt = async () => {
     setLoading(true);
@@ -121,6 +122,7 @@ export const PromptInput = () => {
       });
       definitionAction.setDefinition(currentDefinition);
       schemaAction.setSchema(currentSchema);
+      console.log({ currentSchema });
     } catch (err) {
       console.warn(err);
     }

@@ -20,7 +20,7 @@ const CardComponent = ({
   elementId,
   children,
 }) => {
-  console.log({ elementId, className });
+  // console.log({ elementId, className });
   return (
     <Card
       data-element-id={elementId}

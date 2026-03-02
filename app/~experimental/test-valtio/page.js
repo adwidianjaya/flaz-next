@@ -49,7 +49,7 @@ const InputComponent = () => {
       value={store.states.name}
       // value={snap.states.name}
       onChangeValue={(value) => {
-        console.log("...onChangeValue", value);
+        // console.log("...onChangeValue", value);
         store.states.name = value;
       }}
     />
