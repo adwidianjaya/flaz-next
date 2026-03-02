@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { updateConfigs } from "./action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -96,7 +96,6 @@ export default function ConfigForm({ initialConfigs }) {
   const [configs, setConfigs] = useState(initialConfigs);
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState("seo");
-  const sectionRefs = useRef({});
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -108,30 +107,23 @@ export default function ConfigForm({ initialConfigs }) {
         });
       },
       {
-        rootMargin: "-100px 0px -70% 0px",
+        rootMargin: "-110px 0px -70% 0px",
         threshold: 0,
       },
     );
 
-    Object.values(sectionRefs.current).forEach((ref) => {
-      if (ref) observer.observe(ref);
+    sections.forEach((section) => {
+      const el = document.getElementById(section.id);
+      if (el) observer.observe(el);
     });
 
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    Object.entries(sectionRefs.current).forEach(([id, ref]) => {
-      if (ref) {
-        sectionRefs.current[id] = ref;
-      }
-    });
-  }, []);
-
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
-      const top = el.offsetTop - 80;
+      const top = el.offsetTop - 170;
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
@@ -190,9 +182,10 @@ export default function ConfigForm({ initialConfigs }) {
                   onClick={() => scrollToSection(section.id)}
                   className={cn(
                     "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                    "cursor-pointer",
                     isActive
                       ? "bg-stone-900 text-white shadow-md"
-                      : "text-stone-600 hover:bg-stone-100 hover:text-stone-900",
+                      : "text-stone-600 hover:bg-stone-200 hover:text-stone-900",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -370,6 +363,8 @@ export default function ConfigForm({ initialConfigs }) {
               onChange={handleChange}
             />
           </Section>
+
+          <div className="py-24" />
         </div>
       </div>
     </form>
