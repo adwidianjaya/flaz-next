@@ -6,6 +6,12 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { sql } from "drizzle-orm";
 
+const toTableName = (name) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+
 export const createCollection = async ({ name }) => {
   const normalizedName = name?.trim();
   console.log("...createCollection", { normalizedName });
@@ -19,6 +25,7 @@ export const createCollection = async ({ name }) => {
       .insert(collectionTable)
       .values({
         name: normalizedName,
+        table_name: toTableName(normalizedName),
         schema: {},
       })
       .returning();
@@ -48,6 +55,7 @@ export const saveCurrentCollectionName = async ({ name, collectionId }) => {
       .update(collectionTable)
       .set({
         name: normalizedName,
+        table_name: toTableName(normalizedName),
       })
       .where(eq(collectionTable.id, collectionId));
 
@@ -103,6 +111,7 @@ export const deleteCollection = async ({ collectionId }) => {
     await db.insert(collectionDeletedTable).values({
       id: collection.id,
       name: collection.name,
+      table_name: collection.table_name,
       schema: collection.schema,
       created_at: collection.created_at,
       updated_at: collection.updated_at,
@@ -110,7 +119,9 @@ export const deleteCollection = async ({ collectionId }) => {
     });
 
     // Delete from active table
-    await db.delete(collectionTable).where(eq(collectionTable.id, collectionId));
+    await db
+      .delete(collectionTable)
+      .where(eq(collectionTable.id, collectionId));
 
     revalidatePath("/~collections");
 

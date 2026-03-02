@@ -12,14 +12,14 @@ import {
 } from "@/components/ui/dialog";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { deleteCollection, createCollection } from "./action";
+import { deleteCollection, createCollection, toTableName } from "./action";
 import { useState } from "react";
 dayjs.extend(relativeTime);
 
 export default function CollectionTable({ collections }) {
   const [deleting, setDeleting] = useState(null);
-  const [isCreating, setIsCreating] = useState(false);
-  const [newCollectionName, setNewCollectionName] = useState("");
+  const [collectionName, setCollectionName] = useState("");
+  const [tableName, setTableName] = useState("");
   const [creating, setCreating] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -44,17 +44,27 @@ export default function CollectionTable({ collections }) {
     }
   };
 
-  const handleCreateCollection = async () => {
-    if (!newCollectionName.trim()) {
+  const handleCreateCollection = async (e) => {
+    console.log("...handleCreateCollection");
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    if (!collectionName.trim()) {
       alert("Collection name is required");
+      return;
+    }
+    if (!tableName.trim()) {
+      alert("Table name is required");
       return;
     }
 
     setCreating(true);
     try {
-      const result = await createCollection({ name: newCollectionName });
+      const result = await createCollection({ name: collectionName });
       if (result.success) {
-        setNewCollectionName("");
+        setCollectionName("");
         setDialogOpen(false);
       } else {
         alert(`Failed to create collection: ${result.error}`);
@@ -69,7 +79,17 @@ export default function CollectionTable({ collections }) {
 
   return (
     <div className="space-y-4">
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog
+        open={dialogOpen}
+        onOpenChange={(isOpen) => {
+          // console.log("...onOpenChange", { isOpen });
+
+          setCollectionName("");
+          setTableName("");
+
+          setDialogOpen(isOpen);
+        }}
+      >
         <DialogTrigger asChild>
           <Button>+ New Collection</Button>
         </DialogTrigger>
@@ -80,26 +100,57 @@ export default function CollectionTable({ collections }) {
               Enter a name for your new collection.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <form className="space-y-4" onSubmit={handleCreateCollection}>
             <div className="space-y-2">
               <label className="text-sm font-medium">Collection Name</label>
               <input
                 type="text"
-                value={newCollectionName}
-                onChange={(e) => setNewCollectionName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !creating) {
-                    handleCreateCollection();
-                  }
+                value={collectionName}
+                onChange={(e) => {
+                  setCollectionName(e.target.value);
+
+                  const toTableName = (name) =>
+                    name
+                      .toLowerCase()
+                      .replace(/[^a-z0-9]+/g, "_")
+                      .replace(/^_+|_+$/g, "");
+                  setTableName(toTableName(e.target.value));
                 }}
+                // onKeyDown={(e) => {
+                //   if (e.key === "Enter" && !creating) {
+                //     handleCreateCollection();
+                //   }
+                // }}
                 placeholder="Enter collection name"
                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                 disabled={creating}
                 autoFocus
+                required
               />
             </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Table Name</label>
+              <input
+                type="text"
+                value={tableName}
+                onChange={(e) => setTableName(e.target.value)}
+                // onKeyDown={(e) => {
+                //   if (e.key === "Enter" && !creating) {
+                //     handleCreateCollection();
+                //   }
+                // }}
+                placeholder="Enter collection name"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                disabled={creating || !collectionName.trim()}
+                // autoFocus
+                required
+              />
+            </div>
+
             <div className="flex justify-end gap-2">
               <Button
+                type="button"
                 variant="outline"
                 onClick={() => setDialogOpen(false)}
                 disabled={creating}
@@ -107,13 +158,15 @@ export default function CollectionTable({ collections }) {
                 Cancel
               </Button>
               <Button
-                onClick={handleCreateCollection}
-                disabled={creating || !newCollectionName.trim()}
+                type="submit"
+                disabled={
+                  creating || !collectionName.trim() || !tableName.trim()
+                }
               >
                 {creating ? "Creating..." : "Create"}
               </Button>
             </div>
-          </div>
+          </form>
         </DialogContent>
       </Dialog>
 
@@ -122,7 +175,10 @@ export default function CollectionTable({ collections }) {
           <thead>
             <tr className="border-b">
               <th className="px-4 py-3 text-left font-semibold text-sm">
-                Name
+                Collection Name
+              </th>
+              <th className="px-4 py-3 text-left font-semibold text-sm">
+                Underlying Table Name
               </th>
               <th className="px-4 py-3 text-left font-semibold text-sm">
                 Updated
@@ -149,6 +205,7 @@ export default function CollectionTable({ collections }) {
                   className="border-b hover:bg-accent/50 transition-colors"
                 >
                   <td className="px-4 py-3 text-sm">{collection.name}</td>
+                  <td className="px-4 py-3 text-sm">{collection.table_name}</td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">
                     {dayjs(collection.updated_at).fromNow()}
                   </td>
@@ -164,7 +221,9 @@ export default function CollectionTable({ collections }) {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleDelete(collection.id, collection.name)}
+                      onClick={() =>
+                        handleDelete(collection.id, collection.name)
+                      }
                       disabled={deleting === collection.id}
                     >
                       {deleting === collection.id ? "Deleting..." : "Delete"}
