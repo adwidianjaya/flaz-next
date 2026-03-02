@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import {
   Combobox,
   ComboboxCollection,
@@ -17,30 +16,6 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-
-export const spec = {
-  description: "Combobox input for filtering and selecting a value.",
-  tags: ["Input", "Form"],
-  props: z
-    .object({
-      label: z.string().optional(),
-      description: z.string().optional(),
-      placeholder: z.string().optional(),
-      value: z.string().optional(),
-      disabled: z.boolean().optional(),
-      options: z
-        .array(
-          z.object({
-            label: z.string(),
-            value: z.string(),
-          }),
-        )
-        .optional()
-        .default([]),
-      className: z.string().optional(),
-    })
-    .toJSONSchema(),
-};
 
 const ComboboxInputComponent = ({
   label = "",

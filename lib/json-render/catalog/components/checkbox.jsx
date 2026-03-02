@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
@@ -8,21 +7,6 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-
-export const spec = {
-  description: "Checkbox control for boolean input.",
-  tags: ["Input", "Form"],
-  props: z
-    .object({
-      label: z.string().optional(),
-      description: z.string().optional(),
-      checked: z.boolean().optional(),
-      disabled: z.boolean().optional(),
-      required: z.boolean().optional(),
-      className: z.string().optional(),
-    })
-    .toJSONSchema(),
-};
 
 const CheckboxInput = ({
   label = "",

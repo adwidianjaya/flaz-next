@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import { Switch } from "@/components/ui/switch";
 import {
   Field,
@@ -8,21 +7,6 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-
-export const spec = {
-  description: "Switch control for boolean on/off input.",
-  tags: ["Input", "Form"],
-  props: z
-    .object({
-      label: z.string().optional(),
-      description: z.string().optional(),
-      checked: z.boolean().optional(),
-      disabled: z.boolean().optional(),
-      size: z.enum(["default", "sm"]).optional().default("default"),
-      className: z.string().optional(),
-    })
-    .toJSONSchema(),
-};
 
 const SwitchInput = ({
   label = "",

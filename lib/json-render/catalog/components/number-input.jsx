@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import {
   Field,
   FieldDescription,
@@ -10,25 +9,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
-
-export const spec = {
-  description: "Number input with min/max/step support.",
-  tags: ["Input"],
-  props: z
-    .object({
-      label: z.string().optional(),
-      description: z.string().optional(),
-      placeholder: z.string().optional(),
-      disabled: z.boolean().optional(),
-      value: z.number().optional(),
-      min: z.number().optional(),
-      max: z.number().optional(),
-      step: z.number().optional().default(1),
-      class: z.string().optional(),
-      className: z.string().optional(),
-    })
-    .toJSONSchema(),
-};
 
 const NumberInputComponent = ({
   label = "",
