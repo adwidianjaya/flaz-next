@@ -16,6 +16,7 @@ const CardComponent = ({
   layout = "stack",
   gap = "4",
   columns = "1",
+  bgImageSrc,
   className,
   elementId,
   children,
@@ -26,6 +27,12 @@ const CardComponent = ({
       data-element-id={elementId}
       style={{
         width: typeof width === "number" ? `${width}px` : width,
+        backgroundImage: bgImageSrc
+          ? `url(${bgImageSrc})`
+          : undefined,
+        backgroundSize: bgImageSrc ? "cover" : undefined,
+        backgroundPosition: bgImageSrc ? "center" : undefined,
+        backgroundRepeat: bgImageSrc ? "no-repeat" : undefined,
       }}
       className={cn(
         maxWidth === "sm" && "max-w-sm",

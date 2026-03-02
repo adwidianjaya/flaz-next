@@ -7,6 +7,7 @@ const ContainerComponent = ({
   gap = "0",
   align = "stretch",
   justify = "stretch",
+  bgImageSrc,
   class: classProp,
   className,
   elementId,
@@ -15,6 +16,14 @@ const ContainerComponent = ({
   return (
     <div
       data-element-id={elementId}
+      style={{
+        backgroundImage: bgImageSrc
+          ? `url(${bgImageSrc})`
+          : undefined,
+        backgroundSize: bgImageSrc ? "cover" : undefined,
+        backgroundPosition: bgImageSrc ? "center" : undefined,
+        backgroundRepeat: bgImageSrc ? "no-repeat" : undefined,
+      }}
       className={cn(
         layout === "flex" && "flex",
         layout === "grid" && "grid",
