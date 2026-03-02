@@ -41,7 +41,7 @@ export default function AssetGrid({ assets }) {
         >
           <div className="relative aspect-square w-full bg-stone-100">
             {asset.type === "image" ? (
-              <img
+              <Image
                 src={asset.url}
                 alt={asset.name}
                 fill
