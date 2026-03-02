@@ -13,7 +13,7 @@ export default async function ConfigPage() {
   return (
     <div className="min-h-dvh bg-stone-50 pb-20">
       <TopBarNav />
-      <div className="mx-auto max-w-4xl px-6 py-8">
+      <div className="mx-auto max-w-4xl px-6 pb-8">
         <ConfigForm initialConfigs={initialConfigs} />
       </div>
     </div>
