@@ -1,7 +1,14 @@
 import { db } from "@/lib/db/drizzle";
 import { collectionTable } from "@/lib/db/schema";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CollectionTable from "./collection-table";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import CollectionTable, { CreateCollectionButton } from "./collection-table";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -12,15 +19,25 @@ export default async function Page() {
   const collections = await db.select().from(collectionTable);
 
   return (
-    <div className="p-6 bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 h-dvh">
-      <Card>
-        <CardHeader>
-          <CardTitle>Collections</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CollectionTable collections={collections} />
-        </CardContent>
-      </Card>
+    <div className="min-h-dvh bg-stone-50 p-6">
+      <div className="mx-auto max-w-6xl">
+        <Card className="gap-0 overflow-hidden border-gray-200 bg-white shadow-sm">
+          <CardHeader className="border-b border-gray-200">
+            <div>
+              <CardTitle>Collections</CardTitle>
+              <CardDescription>
+                Manage collection schemas and jump directly into the editor.
+              </CardDescription>
+            </div>
+            <CardAction>
+              <CreateCollectionButton />
+            </CardAction>
+          </CardHeader>
+          <CardContent className="px-0">
+            <CollectionTable collections={collections} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

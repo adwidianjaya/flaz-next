@@ -7,14 +7,15 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 
 export const PageNameInput = ({ initialName, path }) => {
   const [name, setName] = useState(initialName || "");
+  const [savedName, setSavedName] = useState(initialName || "");
   const [saving, setSaving] = useState(false);
 
   const handleSave = async (newName) => {
-    // console.log({ initialName, newName });
-    if (initialName === newName) return;
+    if (savedName === newName) return;
 
     setSaving(true);
     try {
@@ -22,6 +23,7 @@ export const PageNameInput = ({ initialName, path }) => {
         name: newName,
         path,
       });
+      setSavedName(newName);
     } catch (err) {
       console.warn(err);
     }
@@ -29,35 +31,37 @@ export const PageNameInput = ({ initialName, path }) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm text-gray-600">Page Title:</span>
+    <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+      <span>Page:</span>
       <Popover>
         <PopoverTrigger asChild>
-          <span className="cursor-pointer underline decoration-dashed text-sm text-gray-600">
-            {name || "Page title"}
-          </span>
+          <button className="cursor-pointer underline decoration-dashed underline-offset-4">
+            {name || "Untitled page"}
+          </button>
         </PopoverTrigger>
-        <PopoverContent className="p-2" sideOffset={4} align="center">
-          <div className="text-xs pb-1">Change page title:</div>
-          <input
-            type="text"
+        <PopoverContent className="p-3" sideOffset={4} align="start">
+          <div className="mb-2 text-xs font-medium text-gray-500">
+            Rename page
+          </div>
+          <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
             onBlur={() => handleSave(name)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                e.target.blur();
+                e.currentTarget.blur();
               }
             }}
-            placeholder="Page name"
-            className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 w-full"
             disabled={saving}
+            placeholder="Page name"
           />
         </PopoverContent>
       </Popover>
-      &nbsp;|&nbsp;
-      <span className="text-sm text-gray-600">Page Path:</span>
-      <span className="text-sm text-gray-500">{path}</span>
+      <span className="text-gray-300">|</span>
+      <span>Path:</span>
+      <code className="rounded bg-white px-2 py-1 text-xs text-gray-700 shadow-xs">
+        {path}
+      </code>
     </div>
   );
 };

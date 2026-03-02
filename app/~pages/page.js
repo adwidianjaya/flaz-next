@@ -1,8 +1,15 @@
-import Script from "next/script";
 import { db } from "@/lib/db/drizzle";
 import { pageTable } from "@/lib/db/schema";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import PageTable from "./page-table";
+import { CreatePageButton } from "./create-page-button";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -13,18 +20,25 @@ export default async function Page() {
   const pages = await db.select().from(pageTable);
 
   return (
-    <>
-      {/* <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" /> */}
-      <div className="p-6 bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 h-dvh">
-        <Card>
-          <CardHeader>
-            <CardTitle>Pages</CardTitle>
+    <div className="min-h-dvh bg-stone-50 p-6">
+      <div className="mx-auto max-w-6xl">
+        <Card className="gap-0 overflow-hidden border-gray-200 bg-white shadow-sm">
+          <CardHeader className="border-b border-gray-200">
+            <div>
+              <CardTitle>Pages</CardTitle>
+              <CardDescription>
+                Manage visual pages and jump directly into the editor.
+              </CardDescription>
+            </div>
+            <CardAction>
+              <CreatePageButton />
+            </CardAction>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-0">
             <PageTable pages={pages} />
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 }

@@ -7,6 +7,61 @@ import { revalidatePath } from "next/cache";
 import fs from "node:fs";
 import path from "node:path";
 import { sql } from "drizzle-orm";
+import { initDefinition, convertDefinitionToRenderSchema } from "@/lib/json-render/utils";
+import {
+  buildPagePathFromName,
+  normalizePageName,
+  normalizePagePath,
+} from "./path-utils";
+
+const createDefaultPagePayload = () => {
+  const definition = initDefinition();
+  const schema = convertDefinitionToRenderSchema({
+    definition,
+    initialStates: {},
+  });
+
+  return {
+    definition,
+    schema,
+  };
+};
+
+export const createPage = async ({ name, path: requestedPath } = {}) => {
+  const pageName = normalizePageName(name);
+  const pagePath = normalizePagePath(
+    requestedPath || buildPagePathFromName(pageName),
+  );
+  const payload = createDefaultPagePayload();
+
+  const existingPage = await db
+    .select({ id: pageTable.id })
+    .from(pageTable)
+    .where(eq(pageTable.path, pagePath))
+    .limit(1);
+
+  if (existingPage.length) {
+    return { success: false, error: "Page path already exists" };
+  }
+
+  try {
+    const result = await db
+      .insert(pageTable)
+      .values({
+        name: pageName,
+        path: pagePath,
+        ...payload,
+      })
+      .returning();
+
+    revalidatePath("/~pages");
+
+    return { success: true, page: result[0] };
+  } catch (error) {
+    console.error("Create page error:", error);
+    return { success: false, error: "Failed to create page" };
+  }
+};
 
 export const saveCurrentPageName = async ({ name, path }) => {
   const normalizedName = name === undefined ? undefined : name.trim();

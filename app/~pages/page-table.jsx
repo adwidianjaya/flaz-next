@@ -35,16 +35,20 @@ export default function PageTable({ pages }) {
   };
   return (
     <div className="overflow-x-auto">
-      <table className="w-full">
+      <table className="w-full min-w-[720px]">
         <thead>
-          <tr className="border-b">
-            <th className="px-4 py-3 text-left font-semibold text-sm">Name</th>
-            <th className="px-4 py-3 text-left font-semibold text-sm">Path</th>
-            <th className="px-4 py-3 text-left font-semibold text-sm">
+          <tr className="border-b border-gray-200 bg-gray-50">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              Name
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              Path
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
               Updated
             </th>
             <th
-              className="px-4 py-3 text-left font-semibold text-sm"
+              className="px-6 py-3 text-left text-sm font-semibold text-gray-700"
               style={{ width: 160 }}
             >
               Actions
@@ -52,42 +56,52 @@ export default function PageTable({ pages }) {
           </tr>
         </thead>
         <tbody>
+          {!pages.length && (
+            <tr>
+              <td
+                colSpan={4}
+                className="px-6 py-10 text-center text-sm text-gray-500"
+              >
+                No pages yet. Create one to start building.
+              </td>
+            </tr>
+          )}
           {pages.map((page) => (
             <tr
               key={page.id}
-              className="border-b hover:bg-accent/50 transition-colors"
+              className="border-b border-gray-200 transition-colors hover:bg-stone-50"
             >
-              <td className="px-4 py-3 text-sm">{page.name}</td>
-              <td className="px-4 py-3 text-sm">
+              <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                {page.name || "Untitled page"}
+              </td>
+              <td className="px-6 py-4 text-sm">
                 <Link
-                  href={`/${page.path}`}
-                  className="text-primary hover:underline"
+                  href={page.path}
+                  className="text-gray-600 underline decoration-dashed underline-offset-4 transition hover:text-gray-900"
                 >
                   {page.path}
                 </Link>
               </td>
-              <td className="px-4 py-3 text-sm text-muted-foreground">
+              <td className="px-6 py-4 text-sm text-gray-500">
                 {dayjs(page.updated_at).fromNow()}
               </td>
               <td
-                className="px-4 py-3 text-sm space-x-2 flex"
+                className="px-6 py-4 text-sm"
                 style={{ width: 160 }}
               >
-                <Button
-                  asChild
-                  // variant="outline"
-                  size="sm"
-                >
-                  <Link href={`/~pages/edit/${page.path}`}>Edit</Link>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => handleDelete(page.id, page.name || page.path)}
-                  disabled={deleting === page.id}
-                >
-                  {deleting === page.id ? "Deleting..." : "Delete"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={`/~pages/edit${page.path}`}>Edit</Link>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDelete(page.id, page.name || page.path)}
+                    disabled={deleting === page.id}
+                  >
+                    {deleting === page.id ? "Deleting..." : "Delete"}
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}

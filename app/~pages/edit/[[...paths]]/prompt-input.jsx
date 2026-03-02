@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleArrowRight } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
@@ -12,6 +12,8 @@ import {
 } from "@/lib/json-render/utils";
 
 import { saveCurrentPage } from "../../action";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 export const PromptInput = () => {
   const params = useParams();
@@ -23,8 +25,8 @@ export const PromptInput = () => {
     // `create a form, input name, and phone number and output simple greeting. The greeting should be in the form of 'Hello, {name}!'. if name is empty, render "No Name" with orange text. then check name length, if above 10, render Name is too long. if name is "Adhe", render "Noice", else render the name`,
     // `create form for event registration "CoolinerRun". put image on the left https://images.unsplash.com/photo-1758684051112-3df152ce3256?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
     // `find image in internet and change image on the left`,
-    // `create form for event registration "CoolinerRun". find illustration and put image on the left`,
-    `change bg to solid color`,
+    `create form for event registration "CoolinerRun". find illustration and put image on the left`,
+    // `change bg to solid color`,
   );
   const handleSendPrompt = async () => {
     setLoading(true);
@@ -131,9 +133,15 @@ export const PromptInput = () => {
   };
 
   return (
-    <div className="h-32 flex-none border-t border-gray-300 flex flex-col bg-gray-100">
-      <textarea
-        placeholder="Talk to Flaz here..."
+    <div className="border-t border-gray-200 bg-gray-50 p-4">
+      <div className="mb-3">
+        <div className="text-sm font-semibold text-gray-900">Prompt Builder</div>
+        <div className="text-xs text-gray-500">
+          Describe the next UI change and apply it to the current page.
+        </div>
+      </div>
+      <Textarea
+        placeholder="Describe how the page should change..."
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -146,22 +154,20 @@ export const PromptInput = () => {
           setPrompt(e.target.value);
         }}
         className={cn(
-          "w-full h-full outline-0 text-sm px-3 py-2",
-          loading && "animate-pulse pointer-events-none text-gray-500",
+          "min-h-28 resize-none border-gray-200 bg-white text-sm shadow-xs",
+          loading && "pointer-events-none animate-pulse text-gray-500",
         )}
-      ></textarea>
-      <div className="text-right flex-none bg-gray-100">
-        <button
+      />
+      <div className="mt-3 flex justify-end">
+        <Button
           type="button"
+          size="sm"
           onClick={handleSendPrompt}
-          className={cn(
-            "px-2 py-1 cursor-pointer",
-            "text-gray-600 hover:text-gray-400",
-            "transition duration-100",
-          )}
+          disabled={loading || !prompt.trim()}
         >
-          <CircleArrowRight className="w-6 h-6" />
-        </button>
+          <Sparkles className="size-4" />
+          {loading ? "Applying..." : "Apply prompt"}
+        </Button>
       </div>
     </div>
   );

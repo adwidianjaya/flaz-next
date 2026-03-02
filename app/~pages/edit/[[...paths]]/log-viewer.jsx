@@ -26,40 +26,45 @@ export const LogViewer = () => {
     <div
       ref={logContainer}
       className={cn(
-        "h-32 flex-none border-t border-r border-b border-gray-300 overflow-y-scroll font-mono text-xs bg-gray-100",
-        logs.length > 0
-          ? "text-gray-500 hover:text-gray-400 transition duration-100"
-          : "text-gray-500",
+        "h-40 flex-none border-t border-gray-200 bg-white",
+        logs.length > 0 ? "text-gray-500" : "text-gray-500",
       )}
     >
-      <div className="sticky top-0 z-10 bg-gray-600 text-white px-2 py-1 mb-1">
-        Logs
+      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-5 py-3">
+        <div className="text-sm font-semibold text-gray-900">Logs</div>
+        <div className="text-xs text-gray-500">
+          Operation history from prompt-based page edits.
+        </div>
       </div>
       {!logs?.length ? (
-        <div className="py-1 px-4">No logs yet...</div>
+        <div className="px-5 py-4 text-sm">No logs yet...</div>
       ) : (
-        logs.map((log, index) => {
-          return (
-            <div
-              key={index}
-              className={cn(
-                "rounded-sm py-0.5 px-2 shadow",
-                log.operation?.op === "add" &&
-                  "hover:bg-gray-300 text-gray-600",
-                log.operation?.op === "remove" &&
-                  "hover:bg-orange-200 text-orange-600",
-                log.operation?.op === "replace" &&
-                  "hover:bg-purple-200 text-purple-600",
-                log.operation?.op === "info" &&
-                  "hover:bg-blue-200 text-blue-600 py-1 mb-2",
-                log.operation?.op === "error" &&
-                  "hover:bg-red-200 text-red-600 py-1 mb-2",
-              )}
-            >
-              {log.message}
-            </div>
-          );
-        })
+        <div className="space-y-2 px-5 py-4 font-mono text-xs">
+          {logs.map((log, index) => {
+            return (
+              <div
+                key={index}
+                className={cn(
+                  "rounded-lg border px-3 py-2 shadow-xs transition",
+                  log.operation?.op === "add" &&
+                    "border-emerald-200 bg-emerald-50 text-emerald-700",
+                  log.operation?.op === "remove" &&
+                    "border-orange-200 bg-orange-50 text-orange-700",
+                  log.operation?.op === "replace" &&
+                    "border-blue-200 bg-blue-50 text-blue-700",
+                  log.operation?.op === "info" &&
+                    "border-slate-200 bg-slate-50 text-slate-700",
+                  log.operation?.op === "error" &&
+                    "border-red-200 bg-red-50 text-red-700",
+                  !log.operation?.op &&
+                    "border-gray-200 bg-gray-50 text-gray-600",
+                )}
+              >
+                {log.message}
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

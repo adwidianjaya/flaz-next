@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -114,56 +115,75 @@ export const SideNavigator = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-100 overflow-hidden">
-      <div className="flex sticky top-0 left-0 z-10 bg-gray-600 shrink-0">
-        <button
-          onClick={() => handleTabChange("props")}
-          className={cn(
-            "px-3 py-1 text-xs font-medium transition duration-100 cursor-pointer",
-            activeTab === "props"
-              ? "bg-gray-100 text-gray-900"
-              : "text-white hover:bg-gray-500",
-          )}
-        >
-          Props Editor
-        </button>
-        <button
-          onClick={() => handleTabChange("schema")}
-          className={cn(
-            "px-3 py-1 text-xs font-medium transition duration-100 cursor-pointer",
-            activeTab === "schema"
-              ? "bg-gray-100 text-gray-900"
-              : "text-white hover:bg-gray-500",
-          )}
-        >
-          Schema
-        </button>
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
+      <div className="border-b border-gray-200 px-4 py-3">
+        <div className="mb-3">
+          <div className="text-sm font-semibold text-gray-900">Inspector</div>
+          <div className="text-xs text-gray-500">
+            Switch between live props editing and the generated schema.
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleTabChange("props")}
+            className={cn(
+              "rounded-lg px-3 py-2 text-xs font-medium transition",
+              activeTab === "props"
+                ? "bg-gray-900 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900",
+            )}
+          >
+            Props Editor
+          </button>
+          <button
+            onClick={() => handleTabChange("schema")}
+            className={cn(
+              "rounded-lg px-3 py-2 text-xs font-medium transition",
+              activeTab === "schema"
+                ? "bg-gray-900 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900",
+            )}
+          >
+            Schema
+          </button>
+        </div>
       </div>
 
       {activeTab === "schema" && (
-        <div className="relative group min-h-0 flex-1 overflow-auto bg-white border-t border-gray-200">
-          <button
-            onClick={handleCopy}
-            className="absolute right-4 top-4 p-2 rounded-md bg-white border border-gray-200 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-50 z-10"
-            title="Copy schema"
-          >
-            {copied ? (
-              <Check className="w-4 h-4 text-green-600" />
-            ) : (
-              <Copy className="w-4 h-4 text-gray-400" />
-            )}
-          </button>
-          <LazySchemaViewer code={deferredSchemaStringified} />
+        <div className="min-h-0 flex-1 overflow-auto bg-stone-50 p-4">
+          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleCopy}
+              className="absolute right-3 top-3 z-10 size-8 opacity-0 transition-opacity group-hover:opacity-100"
+              title="Copy schema"
+            >
+              {copied ? (
+                <Check className="size-4 text-green-600" />
+              ) : (
+                <Copy className="size-4 text-gray-400" />
+              )}
+            </Button>
+            <LazySchemaViewer code={deferredSchemaStringified} />
+          </div>
         </div>
       )}
 
       {activeTab === "props" && (
-        <div className="px-3 py-2 flex-1 overflow-auto">
+        <div className="min-h-0 flex-1 overflow-auto bg-stone-50 p-4">
           {selectedElement ? (
-            <div>
-              <div className="text-xs font-semibold mb-2 py-1 border-b border-gray-200">
-                Selected Element: {selectedElement.type} [
-                {selectedElement.elementId}]
+            <div className="sticky top-4 space-y-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+              <div className="border-b border-gray-200 pb-3">
+                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+                  Selected Element
+                </div>
+                <div className="mt-2 text-sm font-medium text-gray-900">
+                  {selectedElement.type}
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  {selectedElement.elementId}
+                </div>
               </div>
               <div className="space-y-2">
                 {Object.entries(selectedElement.props || {}).map(
@@ -173,9 +193,10 @@ export const SideNavigator = () => {
                     const enumValues = propSpec?.enum || [];
 
                     return (
-                      <div key={key} className="text-xs">
-                        <div className="font-medium text-gray-600 mb-1">
-                          {key}
+                      <div key={key} className="space-y-1 text-xs">
+                        <div className="font-medium text-gray-600">{key}</div>
+                        <div className="text-[11px] text-gray-400">
+                          {isEnum ? "Enum value" : "Property value"}
                         </div>
                         {isEnum ? (
                           <Select
@@ -197,7 +218,7 @@ export const SideNavigator = () => {
                           >
                             <SelectTrigger
                               size="sm"
-                              className="font-mono text-xs h-auto w-full bg-white"
+                              className="h-auto w-full bg-white font-mono text-xs"
                             >
                               <SelectValue />
                             </SelectTrigger>
@@ -216,7 +237,7 @@ export const SideNavigator = () => {
                         ) : (
                           <Textarea
                             size="sm"
-                            className="font-mono text-xs min-h-[unset] bg-white"
+                            className="min-h-[unset] bg-white font-mono text-xs"
                             value={
                               typeof value === "string"
                                 ? value
@@ -250,8 +271,8 @@ export const SideNavigator = () => {
               </div>
             </div>
           ) : (
-            <div className="text-xs text-gray-600">
-              Click on a component in the preview to edit its props
+            <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-4 text-sm text-gray-500">
+              Click a component in the preview to edit its props here.
             </div>
           )}
         </div>

@@ -1,4 +1,5 @@
-import Script from "next/script";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -37,55 +38,64 @@ export default async function Page({ params }) {
   const { currentPage, path } = await resolveCurrentPage(params);
 
   return (
-    <>
-      {/* <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" /> */}
-
-      <RendererProvider initialDefinition={currentPage?.definition}>
-        <div className="flex flex-col w-full h-dvh">
-          <div className="w-full py-3 px-4 bg-gray-200 flex items-center justify-between gap-4">
-            <div className="italic font-semibold flex items-center">
-              <img
-                src="/logo.svg"
-                alt="Flaz Logo"
-                className="h-8 w-auto inline-block rounded-lg overflow-hidden"
-              />
-              &nbsp; Flaz
+    <RendererProvider initialDefinition={currentPage?.definition}>
+      <div className="flex min-h-dvh flex-col bg-stone-50">
+        <header className="border-b border-gray-200 bg-white px-5 py-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/~pages"
+                className="inline-flex items-center gap-1 text-sm text-gray-500 transition hover:text-gray-900"
+              >
+                <ChevronLeft className="size-4" />
+                Back to pages
+              </Link>
+              <PageNameInput initialName={currentPage?.name} path={path} />
             </div>
-            <PageNameInput initialName={currentPage?.name} path={path} />
+            <div className="text-xs uppercase tracking-[0.18em] text-gray-400">
+              Dynamic Page Builder
+            </div>
           </div>
+        </header>
 
-          <div className="flex flex-1 overflow-hidden">
-            <div
-              className={cn(
-                "w-1/4 flex flex-col",
-                "border-b border-t border-gray-200",
-              )}
-            >
-              <SideNavigator />
+        <div className="flex flex-1 overflow-hidden">
+          <aside className="flex w-[320px] shrink-0 flex-col border-r border-gray-200 bg-white">
+            <SideNavigator />
+            <PromptInput />
+          </aside>
 
-              <PromptInput />
+          <main className="flex min-w-0 flex-1 flex-col bg-stone-50">
+            <div className="border-b border-gray-200 bg-white px-5 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="text-lg font-semibold text-gray-900">
+                    Page Preview
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    Edit the page structure from the sidebar while reviewing the
+                    live output here.
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500">Live editor</div>
+              </div>
             </div>
 
-            <div
-              className={cn(
-                "w-3/4 flex flex-col bg-gray-50",
-                "border-b border-t border-l border-gray-200",
-              )}
-            >
-              <div className="w-full h-full text-xs overflow-scroll">
-                <div className="sticky top-0 z-10 bg-gray-600 text-white px-2 py-1 mb-1 text-xs">
-                  Preview
-                </div>
-                <div className="px-3 py-2">
+            <div className="min-h-0 flex-1 overflow-auto p-5">
+              <div
+                className={cn(
+                  "min-h-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm",
+                )}
+              >
+                <div className="min-h-full px-4 py-4 text-xs">
                   <Renderer />
                 </div>
               </div>
-
-              <LogViewer />
             </div>
-          </div>
+
+            <LogViewer />
+          </main>
         </div>
-      </RendererProvider>
-    </>
+      </div>
+    </RendererProvider>
   );
 }
