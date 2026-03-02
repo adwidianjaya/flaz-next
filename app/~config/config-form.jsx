@@ -158,7 +158,7 @@ export default function ConfigForm({ initialConfigs }) {
         <Button
           type="submit"
           disabled={loading}
-          className="bg-stone-900 hover:bg-stone-800 h-11 px-8 gap-2 shadow-lg shadow-stone-300/50"
+          className="bg-stone-900 hover:bg-stone-800 px-8 gap-2 shadow-lg shadow-stone-300/50"
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
