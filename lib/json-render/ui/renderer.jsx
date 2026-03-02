@@ -81,15 +81,15 @@ const Element = ({ element }) => {
     <div
       style={{
         position: "relative",
-        border: "1px solid transparent",
-        borderRadius: "4px",
-        transition: "border-color 0.15s ease",
+        outline: "2px solid transparent",
+        outlineOffset: "-1px",
+        transition: "outline-color 0.15s ease",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "#3b82f6";
+        e.currentTarget.style.outlineColor = "#3b82f6";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "transparent";
+        e.currentTarget.style.outlineColor = "transparent";
       }}
       onClick={(e) => {
         e.stopPropagation();
