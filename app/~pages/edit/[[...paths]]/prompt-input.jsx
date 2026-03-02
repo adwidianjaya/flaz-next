@@ -11,7 +11,7 @@ import {
   convertDefinitionToRenderSchema,
 } from "@/lib/json-render/utils";
 
-import { saveCurrentPage } from "./action";
+import { saveCurrentPage } from "../../action";
 
 export const PromptInput = () => {
   const params = useParams();

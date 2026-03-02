@@ -27,7 +27,7 @@ import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { snapshot } from "valtio";
 import * as componentDefs from "@/lib/json-render/catalog/components/defs";
-import { saveCurrentPage } from "./action";
+import { saveCurrentPage } from "../../action";
 import { Copy, Check } from "lucide-react";
 
 const getPropSpec = (componentType, propName) => {

@@ -1,4 +1,4 @@
-import { loadCurrentPage } from "@/app/~edit/[[...paths]]/loader";
+import { loadCurrentPage } from "@/app/~pages/loader";
 import { Renderer, RendererProvider } from "@/lib/json-render/ui/renderer";
 import { notFound } from "next/navigation";
 

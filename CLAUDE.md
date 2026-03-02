@@ -26,13 +26,13 @@ Requires a `.env` file with:
 
 ### Core Data Flow
 
-1. User types a prompt in `app/~edit/[[...paths]]/prompt-input.jsx`
+1. User types a prompt in `app/~pages/edit/[[...paths]]/prompt-input.jsx`
 2. Request goes to `app/api/llm/route.js` → `lib/json-render/prompt.js`
 3. LLM (Xai Grok by default, configurable) streams JSONL operations
 4. Operations applied via `lib/json-render/utils.js:updateDefinitionByOperationString`
 5. Updated definition → render schema via `lib/json-render/utils.js:convertDefinitionToRenderSchema`
 6. Schema rendered by `lib/json-render/ui/renderer.jsx`
-7. Page auto-saved to PostgreSQL via `app/~edit/[[...paths]]/action.js`
+7. Page auto-saved to PostgreSQL via `app/~pages/edit/[[...paths]]/action.js`
 
 ### Key Data Structures
 
@@ -78,7 +78,7 @@ export const spec = {
 ### Routes
 
 - `/` or `/<path>` — Public viewer (`app/[[...path]]/page.js`)
-- `/~edit/<path>` — Editor (`app/~edit/[[...paths]]/page.js`)
+- `/~pages/edit/<path>` — Editor (`app/~pages/edit/[[...paths]]/page.js`)
 - `/~pages` — Pages explorer
 - `/api/llm` — LLM streaming endpoint
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { saveCurrentPage } from "./action";
+import { saveCurrentPage } from "../../action";
 import { useDefinition, useSchema } from "@/lib/json-render/ui/store";
 import {
   Popover,

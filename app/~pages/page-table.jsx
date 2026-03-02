@@ -47,7 +47,7 @@ export default function PageTable({ pages }) {
                   // variant="outline"
                   size="sm"
                 >
-                  <Link href={`/~edit/${page.path}`}>Edit</Link>
+                  <Link href={`/~pages/edit/${page.path}`}>Edit</Link>
                 </Button>
               </td>
             </tr>
