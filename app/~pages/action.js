@@ -1,11 +1,12 @@
 "use server";
 
 import { db } from "@/lib/db/drizzle";
-import { pageTable } from "@/lib/db/schema";
+import { pageTable, pageDeletedTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import fs from "node:fs";
 import path from "node:path";
+import { sql } from "drizzle-orm";
 
 export const saveCurrentPageName = async ({ name, path }) => {
   const normalizedName = name === undefined ? undefined : name.trim();
@@ -86,4 +87,40 @@ export const saveCurrentPage = async ({
   return {
     success: true,
   };
+};
+
+export const deletePage = async ({ pageId, path: pagePath }) => {
+  console.log("...deletePage", { pageId, pagePath });
+
+  // Get the page to copy to deleted table
+  const pages = await db
+    .select()
+    .from(pageTable)
+    .where(eq(pageTable.id, pageId))
+    .limit(1);
+
+  if (!pages.length) {
+    return { success: false, error: "Page not found" };
+  }
+
+  const page = pages[0];
+
+  // Insert into deleted table with current timestamp
+  await db.insert(pageDeletedTable).values({
+    id: page.id,
+    name: page.name,
+    path: page.path,
+    schema: page.schema,
+    definition: page.definition,
+    created_at: page.created_at,
+    updated_at: page.updated_at,
+    deleted_at: sql`now()`,
+  });
+
+  // Delete from active table
+  await db.delete(pageTable).where(eq(pageTable.id, pageId));
+
+  revalidatePath("/~pages");
+
+  return { success: true };
 };
