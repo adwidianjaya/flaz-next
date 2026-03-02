@@ -10,16 +10,31 @@ import { loadCurrentPage } from "../../loader";
 import { Renderer, RendererProvider } from "@/lib/json-render/ui/renderer";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
-  title: "Edit Page",
-};
 
-export default async function Page({ params }) {
+const resolveCurrentPage = async (params) => {
   const { paths = [] } = await params;
   const path = ["", ...(paths || [])].join("/");
   // console.log({ paths, path });
   const currentPage = await loadCurrentPage(path);
   // console.log({ currentPage });
+  return { currentPage, path };
+};
+
+// export const metadata = {
+//   title: "Edit Page",
+// };
+export async function generateMetadata({ params, searchParams }, parent) {
+  const { currentPage } = await resolveCurrentPage(params);
+  // console.log({ currentPage, parent });
+
+  return {
+    title: currentPage?.name || "Edit Page",
+    description: currentPage?.description || "No Description",
+  };
+}
+
+export default async function Page({ params }) {
+  const { currentPage, path } = await resolveCurrentPage(params);
 
   return (
     <>

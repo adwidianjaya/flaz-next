@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { saveCurrentPage } from "../../action";
-import { useDefinition, useSchema } from "@/lib/json-render/ui/store";
+import { saveCurrentPageName } from "../../action";
 import {
   Popover,
   PopoverTrigger,
@@ -11,20 +10,17 @@ import {
 
 export const PageNameInput = ({ initialName, path }) => {
   const [name, setName] = useState(initialName || "");
-  const [definition] = useDefinition();
-  const [schema] = useSchema();
   const [saving, setSaving] = useState(false);
 
   const handleSave = async (newName) => {
-    if (name === newName) return;
+    // console.log({ initialName, newName });
+    if (initialName === newName) return;
 
     setSaving(true);
     try {
-      await saveCurrentPage({
+      await saveCurrentPageName({
         name: newName,
         path,
-        definition,
-        schema,
       });
     } catch (err) {
       console.warn(err);
