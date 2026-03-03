@@ -131,3 +131,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
